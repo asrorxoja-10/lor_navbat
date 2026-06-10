@@ -1,7 +1,7 @@
 import datetime
 from datetime import datetime as dt, date, time, timedelta
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from .models import TimeSlot, Appointment
@@ -16,16 +16,25 @@ def home_view(request):
         name = request.POST.get('patient_name')
         phone = request.POST.get('phone_number')
         complaint = request.POST.get('description', '')
+        slot_id = request.POST.get('slot_id')  # Fuqaro sahifada tanlagan vaqt ID si
 
         if not name or not phone:
             messages.error(request, "Iltimos, barcha majburiy maydonlarni to'ldiring!")
             return redirect('home')
 
-        # Avtomatik ravishda eng yaqin va birinchi bo'sh vaqt slotini tanlash (LOR kabi)
-        slot = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time').first()
+        # Agar fuqaro aniq vaqt tanlagan bo'lsa, o'shani tekshiradi
+        if slot_id:
+            slot = get_object_or_404(TimeSlot, id=slot_id)
+        else:
+            # Agar tasodifan tanlamagan bo'lsa, tizim eng birinchi bo'sh vaqtni beradi
+            slot = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time').first()
 
         if not slot:
             messages.error(request, "Kechirasiz, hozircha qabul uchun bo'sh vaqtlar qolmagan!")
+            return redirect('home')
+
+        if slot.is_booked:
+            messages.error(request, "Afsuski, bu vaqt allaqachon boshqa fuqaro tomonidan band qilingan!")
             return redirect('home')
 
         # Navbatni yaratish va saqlash
@@ -42,11 +51,10 @@ def home_view(request):
         soat_matni = slot.time.strftime('%H:%M')
         sana_matni = slot.date.strftime('%d-%m-%Y')
 
-        messages.success(request,
-                         f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga avtomatik navbat oldingiz.")
+        messages.success(request, f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga muvaffaqiyatli navbat oldingiz.")
         return redirect('home')
 
-    # Bo'sh slotlarni saralash
+    # Bo'sh slotlarni saralash (Ochiladigan ro'yxatda chiqishi uchun)
     all_slots = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time')
     slots = [s for s in all_slots if not (s.date == bugun and s.time < hozirgi_vaqt)]
 
@@ -83,8 +91,7 @@ def generate_new_slots_view(request):
             joriy += interval
 
     TimeSlot.objects.bulk_create(yangi_slotlar)
-    messages.success(request,
-                     "Toshloq tuman hokimi qabuli uchun 30 kunlik yangi qabul soatlari muvaffaqiyatli yaratildi!")
+    messages.success(request, "Toshloq tuman hokimi qabuli uchun 30 kunlik yeni qabul soatlari muvaffaqiyatli yaratildi!")
     return redirect('home')
 
 

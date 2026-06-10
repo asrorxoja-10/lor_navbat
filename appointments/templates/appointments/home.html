@@ -51,8 +51,8 @@
         .alert-error { background-color: #fee2e2; color: #b91c1c; }
         .form-group { margin-bottom: 18px; }
         label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); }
         .btn { background-color: var(--primary); color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-size: 16px; font-weight: 600; cursor: pointer; }
         .btn:hover { background-color: #1e40af; }
     </style>
@@ -87,7 +87,19 @@
                 <textarea name="description" rows="3" placeholder="Murojaat yoki muammoingiz haqida qisqacha yozing..."></textarea>
             </div>
 
-            <button type="submit" class="btn">Qabulga yozilish (Avtomatik navbat olish) 🗓️</button>
+            <div class="form-group">
+                <label>O'zingizga qulay qabul kunini va vaqtini tanlang:</label>
+                <select name="slot_id" required>
+                    <option value="">-- Vaqtni tanlang --</option>
+                    {% for slot in slots %}
+                        <option value="{{ slot.id }}">{{ slot.date|date:"d-m-Y" }} | Soat: {{ slot.time|time:"H:i" }}</option>
+                    {% empty %}
+                        <option value="">Hozircha bo'sh qabul vaqtlari mavjud emas</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn">Qabulga yozilish (Navbat olish) 🗓️</button>
         </form>
     </div>
 </body>
