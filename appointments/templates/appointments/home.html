@@ -6,7 +6,6 @@
     <title>Toshloq tuman hokimi qabuliga onlayn navbat olish</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* STANDART YORUG' REJIM - GERB BILAN */
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -17,22 +16,19 @@
             justify-content: center;
             box-sizing: border-box;
             transition: background 0.3s ease, color 0.3s ease;
-
-            /* Orqa fonga Davlat Gerbini joylashtirish (Shaffof va markazda) */
             background-color: #f1f5f9 !important;
-            background-image: linear-gradient(rgba(241, 245, 249, 0.9), rgba(241, 245, 249, 0.9)),
-                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
-            background-repeat: no-repeat !important;
-            background-position: center center !important;
-            background-size: 450px !important;
-            background-attachment: fixed !important;
             color: #0f172a !important;
         }
 
         .container {
             width: 100%;
             max-width: 530px;
-            background: rgba(255, 255, 255, 0.95) !important; /* Gerb ko'rinishi uchun shaffofroq oq card */
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
+            background-repeat: no-repeat !important;
+            background-position: center center !important;
+            background-size: 72% !important;
             backdrop-filter: blur(8px);
             padding: 40px 30px;
             border-radius: 16px;
@@ -117,16 +113,20 @@
             margin-top: 10px;
         }
 
-        /* QORONG'U REJIM STILLARI (MAJBURIY OVERRIDE) */
+        /* QORONG'U REJIM */
         body.dark-mode {
             background-color: #0b1329 !important;
-            background-image: linear-gradient(rgba(11, 19, 41, 0.92), rgba(11, 19, 41, 0.92)),
-                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
             color: #f8fafc !important;
         }
         body.dark-mode .container {
-            background: rgba(30, 41, 59, 0.9) !important;
+            background-color: rgba(22, 35, 65, 0.95) !important;
+            background-image: linear-gradient(rgba(22, 35, 65, 0.88), rgba(22, 35, 65, 0.88)),
+                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
+            background-repeat: no-repeat !important;
+            background-position: center center !important;
+            background-size: 72% !important;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6) !important;
+            border-top-color: #0284c7 !important;
         }
         body.dark-mode .theme-toggle {
             background: #172445 !important;
