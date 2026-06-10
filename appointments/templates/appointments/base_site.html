@@ -1,0 +1,93 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}" style="background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; font-family: 'Inter', sans-serif !important; font-weight: 800 !important; letter-spacing: -0.5px;">
+        Dr. Akmalov LOR | Boshqaruv Paneli
+    </a>
+</h1>
+{% endblock %}
+
+{% block extramstyle %}
+{{ block.super }}
+<style>
+    /* --- GLOBAL ADMIN HEADER STILIZASIYASI --- */
+    #header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+        padding: 15px 20px !important;
+        border-bottom: 1px solid #334155 !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    #branding {
+        padding: 0 !important;
+    }
+
+    /* --- FOYDALANUVCHI SOZLAMALARI (O'NG TOMON) --- */
+    #user-tools {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        color: #94a3b8 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* "Xush kelibsiz" matni va ism */
+    #user-tools strong {
+        color: #f8fafc !important;
+        font-weight: 700 !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Havolalarni zamonaviy tugmaga aylantirish */
+    #user-tools a {
+        color: #cbd5e1 !important;
+        text-decoration: none !important;
+        font-weight: 600 !important;
+        padding: 6px 12px !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    /* Tugma ustiga kelganda */
+    #user-tools a:hover {
+        background: #4f46e5 !important; /* Premium Ko'k */
+        color: white !important;
+        border-color: #4f46e5 !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* Chiqish (Log out) tugmasi */
+    #user-tools a[href*="logout"] {
+        background: rgba(239, 68, 68, 0.1) !important;
+        border-color: rgba(239, 68, 68, 0.15) !important;
+        color: #fca5a5 !important;
+    }
+    
+    #user-tools a[href*="logout"]:hover {
+        background: #ef4444 !important;
+        color: white !important;
+        border-color: #ef4444 !important;
+    }
+
+    /* Dark mode tepadagi standart ikonkasi o'rnini to'g'rilash */
+    #user-tools button {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 8px !important;
+        padding: 5px !important;
+        cursor: pointer !important;
+    }
+</style>
+{% endblock %}
