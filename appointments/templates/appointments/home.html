@@ -6,7 +6,7 @@
     <title>Toshloq tuman hokimi qabuliga onlayn navbat olish</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* STANDART YORUG' REJIM - PRESTIJ HOKIMIYAT STILI */
+        /* STANDART YORUG' REJIM - GERB BILAN */
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -17,18 +17,27 @@
             justify-content: center;
             box-sizing: border-box;
             transition: background 0.3s ease, color 0.3s ease;
-            background: linear-gradient(135deg, #eef2f7 0%, #dfe7f0 50%, #cfdae8 100%) !important;
+
+            /* Orqa fonga Davlat Gerbini joylashtirish (Shaffof va markazda) */
+            background-color: #f1f5f9 !important;
+            background-image: linear-gradient(rgba(241, 245, 249, 0.9), rgba(241, 245, 249, 0.9)),
+                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
+            background-repeat: no-repeat !important;
+            background-position: center center !important;
+            background-size: 450px !important;
+            background-attachment: fixed !important;
             color: #0f172a !important;
         }
 
         .container {
             width: 100%;
             max-width: 530px;
-            background: #ffffff !important;
+            background: rgba(255, 255, 255, 0.95) !important; /* Gerb ko'rinishi uchun shaffofroq oq card */
+            backdrop-filter: blur(8px);
             padding: 40px 30px;
             border-radius: 16px;
             box-shadow: 0 20px 25px -5px rgba(30, 58, 138, 0.15), 0 8px 10px -6px rgba(30, 58, 138, 0.1);
-            border-top: 6px solid #d97706 !important; /* Oltinrang chiziq */
+            border-top: 6px solid #d97706 !important;
             position: relative;
         }
 
@@ -53,7 +62,7 @@
             font-size: 24px;
             font-weight: 800;
             text-align: center;
-            color: #1e3a8a !important; /* Hokimiyat ko'k rangi */
+            color: #1e3a8a !important;
             margin: 15px 0 5px 0;
         }
         .subtitle {
@@ -110,12 +119,14 @@
 
         /* QORONG'U REJIM STILLARI (MAJBURIY OVERRIDE) */
         body.dark-mode {
-            background: linear-gradient(135deg, #060b14 0%, #0c152b 50%, #122142 100%) !important;
+            background-color: #0b1329 !important;
+            background-image: linear-gradient(rgba(11, 19, 41, 0.92), rgba(11, 19, 41, 0.92)),
+                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
             color: #f8fafc !important;
         }
         body.dark-mode .container {
-            background: #111c33 !important;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+            background: rgba(30, 41, 59, 0.9) !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6) !important;
         }
         body.dark-mode .theme-toggle {
             background: #172445 !important;
@@ -179,7 +190,7 @@
                     {% for slot in slots %}
                         <option value="{{ slot.id }}">{{ slot.date|date:"d-m-Y" }} | Soat: {{ slot.time|time:"H:i" }}</option>
                     {% empty %}
-                        <option value="">Hozircha bo'sh qabul vaqtlari mavjud emas</option>
+                        <option value="">Hozircha bo'sh qabul vaqtlari mutable emas</option>
                     {% endfor %}
                 </select>
             </div>

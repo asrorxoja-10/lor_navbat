@@ -17,17 +17,15 @@ def home_view(request):
         name = request.POST.get('patient_name')
         phone = request.POST.get('phone_number')
         complaint = request.POST.get('description', '')
-        slot_id = request.POST.get('slot_id')  # Fuqaro sahifada tanlagan vaqt ID si
+        slot_id = request.POST.get('slot_id')
 
         if not name or not phone:
             messages.error(request, "Iltimos, barcha majburiy maydonlarni to'ldiring!")
             return redirect('home')
 
-        # Agar fuqaro aniq vaqt tanlagan bo'lsa, o'shani tekshiradi
         if slot_id:
             slot = get_object_or_404(TimeSlot, id=slot_id)
         else:
-            # Agar tasodifan tanlamagan bo'lsa, tizim eng birinchi bo'sh vaqtni beradi
             slot = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time').first()
 
         if not slot:
@@ -38,7 +36,6 @@ def home_view(request):
             messages.error(request, "Afsuski, bu vaqt allaqachon boshqa fuqaro tomonidan band qilingan!")
             return redirect('home')
 
-        # Navbatni yaratish va saqlash
         Appointment.objects.create(
             slot=slot,
             patient_name=name,
@@ -55,11 +52,9 @@ def home_view(request):
         messages.success(request, f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga muvaffaqiyatli navbat oldingiz.")
         return redirect('home')
 
-    # Bo'sh slotlarni saralash (Ochiladigan ro'yxatda chiqishi uchun)
     all_slots = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time')
     slots = [s for s in all_slots if not (s.date == bugun and s.time < hozirgi_vaqt)]
 
-    # Brauzer keshini har safar majburlab yangilash uchun vaqt muhrini (timestamp) qo'shamiz
     return render(request, 'appointments/home.html', {
         'slots': slots,
         'v': time_module.time()
@@ -71,16 +66,14 @@ def generate_new_slots_view(request):
     bugun = hozir.date()
     hozirgi_vaqt = hozir.time()
 
-    # Avvalgi band qilinmagan eski slotlarni tozalash
     TimeSlot.objects.filter(is_booked=False).delete()
     yangi_slotlar = []
 
-    # 30 kun uchun soat 09:00 dan 21:00 gacha har 1 soatda (60 daqiqa) slot ochish
     for i in range(30):
         qabul_kuni = bugun + timedelta(days=i)
-        boshlanish = dt.combine(date.today(), time(9, 0))  # 09:00
-        tugash = dt.combine(date.today(), time(21, 0))  # 21:00
-        interval = timedelta(minutes=60)  # 1 soatlik qadam
+        boshlanish = dt.combine(date.today(), time(9, 0))
+        tugash = dt.combine(date.today(), time(21, 0))
+        interval = timedelta(minutes=60)
 
         joriy = boshlanish
         while joriy <= tugash:
