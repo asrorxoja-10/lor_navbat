@@ -6,101 +6,63 @@
     <title>Toshloq tuman hokimi qabuliga onlayn navbat olish</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #1e3a8a; /* Hokimiyat rasmiy ko'k rangi */
-            --accent: #d97706;  /* Oltinrang chiziq */
-
-            /* Yorug' rejim uchun Premium Davlat idorasi foni */
-            --bg: #eef2f7;
-            --bg-pattern: linear-gradient(217deg, rgba(30, 58, 138, 0.07), rgba(255,255,255,0) 70.71%),
-                          linear-gradient(127deg, rgba(217, 119, 6, 0.05), rgba(255,255,255,0) 70.71%),
-                          linear-gradient(336deg, rgba(30, 58, 138, 0.04), rgba(255,255,255,0) 70.71%);
-
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --border: #cbd5e1;
-            --input-bg: #ffffff;
-            --shadow: rgba(30, 58, 138, 0.12);
-        }
-
-        [data-theme="dark"] {
-            --primary: #38bdf8;
-
-            /* Qorong'u rejim uchun Elegant va chuqur fon */
-            --bg: #090d1a;
-            --bg-pattern: linear-gradient(217deg, rgba(30, 58, 138, 0.25), rgba(0,0,0,0) 70.71%),
-                          linear-gradient(127deg, rgba(217, 119, 6, 0.12), rgba(0,0,0,0) 70.71%),
-                          linear-gradient(336deg, rgba(15, 23, 42, 0.9), rgba(0,0,0,0) 70.71%);
-
-            --card-bg: #131c2e;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #22314d;
-            --input-bg: #1a263e;
-            --shadow: rgba(0, 0, 0, 0.4);
-        }
-
+        /* YORUG' REJIM USLUBLARI (STANDART) */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            background-image: var(--bg-pattern);
-            color: var(--text-main);
             margin: 0;
             padding: 15px;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s, color 0.3s;
             box-sizing: border-box;
+            transition: all 0.3s ease;
+
+            /* Hokimiyat uchun muhtasham dynamic gradient fon */
+            background: linear-gradient(135deg, #eef2f7 0%, #dfe7f0 50%, #cfdae8 100%);
+            color: #0f172a;
         }
 
         .container {
             width: 100%;
             max-width: 530px;
-            background: var(--card-bg);
+            background: #ffffff;
             padding: 35px 30px;
             border-radius: 16px;
-            box-shadow: 0 20px 25px -5px var(--shadow), 0 8px 10px -6px var(--shadow);
-            border-top: 6px solid var(--accent);
+            box-shadow: 0 20px 25px -5px rgba(30, 58, 138, 0.15), 0 8px 10px -6px rgba(30, 58, 138, 0.1);
+            border-top: 6px solid #d97706; /* Oltinrang liniya */
             position: relative;
-            transition: background-color 0.3s, border-color 0.3s;
+            transition: all 0.3s ease;
         }
 
-        /* Rejim tugmasi */
         .theme-toggle {
             position: absolute;
             top: 20px;
             right: 25px;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            padding: 6px 12px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
-            color: var(--text-main);
+            color: #0f172a;
             display: flex;
             align-items: center;
             gap: 6px;
             transition: all 0.2s;
-        }
-        .theme-toggle:hover {
-            border-color: var(--primary);
-            background-color: var(--bg);
         }
 
         h1 {
             font-size: 22px;
             font-weight: 800;
             text-align: center;
-            color: var(--primary);
+            color: #1e3a8a; /* Hokimiyat ko'k rangi */
             margin: 15px 0 5px 0;
         }
         .subtitle {
             text-align: center;
-            color: var(--text-muted);
+            color: #475569;
             margin-bottom: 25px;
             font-size: 13px;
             font-weight: 500;
@@ -115,26 +77,24 @@
             text-align: center;
         }
         .alert-success { background-color: #dcfce7; color: #15803d; }
-        [data-theme="dark"] .alert-success { background-color: #064e3b; color: #6ee7b7; }
         .alert-error { background-color: #fee2e2; color: #b91c1c; }
-        [data-theme="dark"] .alert-error { background-color: #4c1d1d; color: #fca5a5; }
 
         .form-group { margin-bottom: 18px; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: var(--text-main); }
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: #0f172a; }
 
         input, textarea, select {
             width: 100%;
             padding: 12px;
-            border: 1px solid var(--border);
+            border: 1px solid #cbd5e1;
             border-radius: 8px;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
-            background-color: var(--input-bg);
-            color: var(--text-main);
+            background-color: #ffffff;
+            color: #0f172a;
             transition: all 0.2s;
         }
-        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: #1e3a8a; }
 
         .btn {
             background-color: #1e3a8a;
@@ -146,11 +106,38 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
             margin-top: 5px;
         }
-        [data-theme="dark"] .btn { background-color: #0284c7; }
-        .btn:hover { opacity: 0.95; }
+        .btn:hover { background-color: #1e40af; opacity: 0.95; }
+
+        /* QORONG'U REJIM USLUBLARI (DARK MODE) */
+        body.dark-mode {
+            background: linear-gradient(135deg, #060b14 0%, #0c152b 50%, #122142 100%);
+            color: #f8fafc;
+        }
+        body.dark-mode .container {
+            background: #111c33;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+        }
+        body.dark-mode .theme-toggle {
+            background: #1a2642;
+            border-color: #2e3f69;
+            color: #f8fafc;
+        }
+        body.dark-mode h1 { color: #38bdf8; }
+        body.dark-mode .subtitle { color: #94a3b8; }
+        body.dark-mode label { color: #f8fafc; }
+        body.dark-mode input, body.dark-mode textarea, body.dark-mode select {
+            background-color: #172445;
+            border-color: #2e3f69;
+            color: #f8fafc;
+        }
+        body.dark-mode input:focus, body.dark-mode textarea:focus, body.dark-mode select:focus { border-color: #38bdf8; }
+        body.dark-mode .btn { background-color: #0284c7; }
+        body.dark-mode .btn:hover { background-color: #0369a1; }
+        body.dark-mode .alert-success { background-color: #064e3b; color: #6ee7b7; }
+        body.dark-mode .alert-error { background-color: #4c1d1d; color: #fca5a5; }
     </style>
 </head>
 <body>
@@ -204,32 +191,32 @@
     </div>
 
     <script>
-        const btn = document.getElementById('modeSwitcher');
+        const switcher = document.getElementById('modeSwitcher');
         const icon = document.getElementById('modeIcon');
         const text = document.getElementById('modeText');
+        const body = document.body;
 
+        // Xotiradan rejimni tekshirish va darhol qo'llash
         const savedTheme = localStorage.getItem('site-theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        updateInterface(savedTheme);
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            icon.textContent = '☀️';
+            text.textContent = 'Yorug\'';
+        }
 
-        btn.addEventListener('click', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        switcher.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
 
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('site-theme', newTheme);
-            updateInterface(newTheme);
-        });
-
-        function updateInterface(theme) {
-            if (theme === 'dark') {
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('site-theme', 'dark');
                 icon.textContent = '☀️';
                 text.textContent = 'Yorug\'';
             } else {
+                localStorage.setItem('site-theme', 'light');
                 icon.textContent = '🌙';
                 text.textContent = 'Qorong\'u';
             }
-        }
+        });
     </script>
 </body>
 </html>
