@@ -6,46 +6,45 @@
     <title>Toshloq tuman hokimi qabuliga onlayn navbat olish</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Hokimiyat darajasidagi Premium ranglar va fon tizimi */
         :root {
-            --bg: #f0f4f8;
-            --card-bg: rgba(255, 255, 255, 0.95);
+            --primary: #1e3a8a; /* Hokimiyat rasmiy ko'k rangi */
+            --accent: #d97706;  /* Oltinrang chiziq */
+
+            /* Yorug' rejim uchun Premium Davlat idorasi foni */
+            --bg: #eef2f7;
+            --bg-pattern: linear-gradient(217deg, rgba(30, 58, 138, 0.07), rgba(255,255,255,0) 70.71%),
+                          linear-gradient(127deg, rgba(217, 119, 6, 0.05), rgba(255,255,255,0) 70.71%),
+                          linear-gradient(336deg, rgba(30, 58, 138, 0.04), rgba(255,255,255,0) 70.71%);
+
+            --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #475569;
             --border: #cbd5e1;
             --input-bg: #ffffff;
-            --primary: #1e3a8a; /* Davlat ramziy to'q ko'k rangi */
-            --accent: #d97706;  /* Oltinrang chiziq */
-            --shadow: rgba(30, 58, 138, 0.15);
-
-            /* Yorug' rejim uchun milliy naqsh va geometrik fon */
-            --pattern-color: rgba(30, 58, 138, 0.03);
-            --bg-gradient: radial-gradient(circle at top right, rgba(217, 119, 6, 0.08) 0%, transparent 40%),
-                           radial-gradient(circle at bottom left, rgba(30, 58, 138, 0.08) 0%, transparent 50%);
+            --shadow: rgba(30, 58, 138, 0.12);
         }
 
         [data-theme="dark"] {
-            --bg: #0b1329;
-            --card-bg: rgba(30, 41, 59, 0.95);
+            --primary: #38bdf8;
+
+            /* Qorong'u rejim uchun Elegant va chuqur fon */
+            --bg: #090d1a;
+            --bg-pattern: linear-gradient(217deg, rgba(30, 58, 138, 0.25), rgba(0,0,0,0) 70.71%),
+                          linear-gradient(127deg, rgba(217, 119, 6, 0.12), rgba(0,0,0,0) 70.71%),
+                          linear-gradient(336deg, rgba(15, 23, 42, 0.9), rgba(0,0,0,0) 70.71%);
+
+            --card-bg: #131c2e;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: #334155;
-            --input-bg: #1e293b;
-            --primary: #38bdf8;
-            --shadow: rgba(0, 0, 0, 0.5);
-
-            /* Qorong'u rejim uchun fon elementlari */
-            --pattern-color: rgba(56, 189, 248, 0.02);
-            --bg-gradient: radial-gradient(circle at top right, rgba(217, 119, 6, 0.15) 0%, transparent 45%),
-                           radial-gradient(circle at bottom left, rgba(15, 23, 42, 0.8) 0%, transparent 60%);
+            --border: #22314d;
+            --input-bg: #1a263e;
+            --shadow: rgba(0, 0, 0, 0.4);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
-            background-image: var(--bg-gradient),
-                              /* SVG orqali yaratilgan silliq milliy giloslangan naqsh */
-                              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%231e3a8a' fill-opacity='0.03'%3E%3Cpath d='M40 0l40 40-40 40L0 40zM40 10L10 40l30 30 30-30z'/%3E%3Ccircle cx='40' cy='40' r='5'/%3E%3C/g%3E%3C/svg%3E");
+            background-image: var(--bg-pattern);
             color: var(--text-main);
             margin: 0;
             padding: 15px;
@@ -57,31 +56,24 @@
             box-sizing: border-box;
         }
 
-        /* Qorong'u rejimda naqsh rangini moslashtirish */
-        [data-theme="dark"] body {
-            background-image: var(--bg-gradient),
-                              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%3C38bdf8' fill-opacity='0.02'%3E%3Cpath d='M40 0l40 40-40 40L0 40zM40 10L10 40l30 30 30-30z'/%3E%3Ccircle cx='40' cy='40' r='5'/%3E%3C/g%3E%3C/svg%3E");
-        }
-
         .container {
             width: 100%;
-            max-width: 550px;
+            max-width: 530px;
             background: var(--card-bg);
-            padding: 40px 35px;
+            padding: 35px 30px;
             border-radius: 16px;
-            box-shadow: 0 20px 25px -5px var(--shadow), 0 10px 10px -5px var(--shadow);
+            box-shadow: 0 20px 25px -5px var(--shadow), 0 8px 10px -6px var(--shadow);
             border-top: 6px solid var(--accent);
             position: relative;
-            backdrop-filter: blur(8px); /* Orqa fonni chiroyli xiralashtirish effecti */
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* Rejimni o'zgartirish tugmasi */
+        /* Rejim tugmasi */
         .theme-toggle {
             position: absolute;
             top: 20px;
             right: 25px;
-            background: transparent;
+            background: var(--input-bg);
             border: 1px solid var(--border);
             padding: 6px 12px;
             border-radius: 20px;
@@ -95,85 +87,70 @@
             transition: all 0.2s;
         }
         .theme-toggle:hover {
-            background: var(--primary);
-            color: white;
             border-color: var(--primary);
+            background-color: var(--bg);
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             text-align: center;
             color: var(--primary);
-            margin: 15px 0 6px 0;
-            letter-spacing: -0.5px;
+            margin: 15px 0 5px 0;
         }
         .subtitle {
             text-align: center;
             color: var(--text-muted);
-            margin-bottom: 30px;
-            font-size: 14px;
+            margin-bottom: 25px;
+            font-size: 13px;
             font-weight: 500;
         }
 
         .alert {
-            padding: 14px;
-            border-radius: 10px;
-            margin-bottom: 22px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             font-size: 14px;
             font-weight: 600;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
-        .alert-success { background-color: #dcfce7; color: #15803d; border-left: 4px solid #22c55e; }
-        [data-theme="dark"] .alert-success { background-color: #064e3b; color: #a7f3d0; border-left: 4px solid #10b981; }
-        .alert-error { background-color: #fee2e2; color: #b91c1c; border-left: 4px solid #ef4444; }
-        [data-theme="dark"] .alert-error { background-color: #4c1d1d; color: #fca5a5; border-left: 4px solid #ef4444; }
+        .alert-success { background-color: #dcfce7; color: #15803d; }
+        [data-theme="dark"] .alert-success { background-color: #064e3b; color: #6ee7b7; }
+        .alert-error { background-color: #fee2e2; color: #b91c1c; }
+        [data-theme="dark"] .alert-error { background-color: #4c1d1d; color: #fca5a5; }
 
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: var(--text-main); }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: var(--text-main); }
 
         input, textarea, select {
             width: 100%;
-            padding: 13px 16px;
+            padding: 12px;
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 8px;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
             background-color: var(--input-bg);
             color: var(--text-main);
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
-        }
-        [data-theme="dark"] input:focus, [data-theme="dark"] textarea:focus, [data-theme="dark"] select:focus {
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
-        }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); }
 
         .btn {
-            background-color: var(--primary);
-            color: #ffffff;
-            padding: 15px;
+            background-color: #1e3a8a;
+            color: white;
+            padding: 14px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             width: 100%;
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 6px -1px var(--shadow);
-            transition: all 0.2s ease;
-            margin-top: 10px;
+            transition: background-color 0.2s;
+            margin-top: 5px;
         }
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 12px -2px var(--shadow);
-            filter: brightness(1.1);
-        }
-        .btn:active { transform: translateY(0); }
+        [data-theme="dark"] .btn { background-color: #0284c7; }
+        .btn:hover { opacity: 0.95; }
     </style>
 </head>
 <body>
@@ -231,7 +208,6 @@
         const icon = document.getElementById('modeIcon');
         const text = document.getElementById('modeText');
 
-        // Brauzer xotirasidan saqlangan rejimni tekshirish
         const savedTheme = localStorage.getItem('site-theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateInterface(savedTheme);
