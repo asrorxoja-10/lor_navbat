@@ -16,19 +16,22 @@
             justify-content: center;
             box-sizing: border-box;
             transition: background 0.3s ease, color 0.3s ease;
+
+            /* ORQA FONGA UZB GERBINI SHAFFOF QILIB JOYLASHTIRISH */
             background-color: #f1f5f9 !important;
+            background-image: linear-gradient(rgba(241, 245, 249, 0.88), rgba(241, 245, 249, 0.88)),
+                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
+            background-repeat: no-repeat !important;
+            background-position: center center !important;
+            background-size: 420px !important;
+            background-attachment: fixed !important;
             color: #0f172a !important;
         }
 
         .container {
             width: 100%;
             max-width: 530px;
-            background-color: rgba(255, 255, 255, 0.95) !important;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
-            background-repeat: no-repeat !important;
-            background-position: center center !important;
-            background-size: 72% !important;
+            background: rgba(255, 255, 255, 0.96) !important;
             backdrop-filter: blur(8px);
             padding: 40px 30px;
             border-radius: 16px;
@@ -113,20 +116,16 @@
             margin-top: 10px;
         }
 
-        /* QORONG'U REJIM */
+        /* QORONG'U REJIMDA GERB SAKLANADI */
         body.dark-mode {
             background-color: #0b1329 !important;
+            background-image: linear-gradient(rgba(11, 19, 41, 0.93), rgba(11, 19, 41, 0.93)),
+                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
             color: #f8fafc !important;
         }
         body.dark-mode .container {
-            background-color: rgba(22, 35, 65, 0.95) !important;
-            background-image: linear-gradient(rgba(22, 35, 65, 0.88), rgba(22, 35, 65, 0.88)),
-                              url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
-            background-repeat: no-repeat !important;
-            background-position: center center !important;
-            background-size: 72% !important;
+            background: rgba(30, 41, 59, 0.93) !important;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6) !important;
-            border-top-color: #0284c7 !important;
         }
         body.dark-mode .theme-toggle {
             background: #172445 !important;
@@ -148,7 +147,6 @@
     </style>
 </head>
 <body>
-    <span style="display:none;" id="cache-buster">v={{ v }}</span>
 
     <div class="container">
         <button type="button" class="theme-toggle" id="modeSwitcher">
@@ -190,7 +188,7 @@
                     {% for slot in slots %}
                         <option value="{{ slot.id }}">{{ slot.date|date:"d-m-Y" }} | Soat: {{ slot.time|time:"H:i" }}</option>
                     {% empty %}
-                        <option value="">Hozircha bo'sh qabul vaqtlari mutable emas</option>
+                        <option value="">Hozircha bo'sh qabul vaqtlari mavjud emas</option>
                     {% endfor %}
                 </select>
             </div>

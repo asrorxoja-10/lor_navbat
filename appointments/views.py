@@ -1,5 +1,4 @@
 import datetime
-import time as time_module
 from datetime import datetime as dt, date, time, timedelta
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
@@ -55,10 +54,7 @@ def home_view(request):
     all_slots = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time')
     slots = [s for s in all_slots if not (s.date == bugun and s.time < hozirgi_vaqt)]
 
-    return render(request, 'appointments/home.html', {
-        'slots': slots,
-        'v': time_module.time()
-    })
+    return render(request, 'appointments/home.html', {'slots': slots})
 
 
 def generate_new_slots_view(request):
