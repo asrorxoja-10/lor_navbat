@@ -3,613 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Akmalov LOR | Onlayn Navbat Olish</title>
-
+    <title>Toshloq tuman hokimi qabuliga onlayn navbat olish</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- PREMIUM MODERN DESIGN SYSTEM --- */
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --primary-light: #f0fdf4;
-            --success: #10b981;
-            --success-hover: #059669;
-            --success-bg: #f0fdf4;
-            --danger: #ef4444;
-            --danger-bg: #fef2f2;
-            --dark: #0f172a;
-            --gray-text: #64748b;
-            --border: #e2e8f0;
-            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --body-bg: radial-gradient(circle at top right, #e0e7ff 0%, #f1f5f9 60%);
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --header-bg: rgba(255, 255, 255, 0.75);
-            --text-main: #0f172a;
-            --banner-bg: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
-            --banner-text: #1e40af;
-            --input-bg: #f8fafc;
+            --primary: #1e3a8a; /* Hokimlik to'q ko'k rangi */
+            --primary-hover: #1e40af;
+            --accent: #d97706; /* Rasmiy oltinrang */
+            --bg: #f8fafc;
+            --text: #0f172a;
         }
-
-        /* --- TUNGI REJIM (DARK MODE) STYLES --- */
-        [data-theme="dark"] {
-            --body-bg: radial-gradient(circle at top right, #1e1b4b 0%, #0f172a 70%);
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --header-bg: rgba(15, 23, 42, 0.8);
-            --text-main: #f8fafc;
-            --border: #334155;
-            --gray-text: #94a3b8;
-            --banner-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            --banner-text: #38bdf8;
-            --input-bg: #1e293b;
-            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-            --success-bg: rgba(16, 185, 129, 0.1);
-            --danger-bg: rgba(239, 68, 68, 0.1);
-            --primary-light: rgba(79, 70, 229, 0.15);
-        }
-
         body {
-            background: var(--body-bg);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 0;
-            color: var(--text-main);
-            -webkit-font-smoothing: antialiased;
-            transition: background 0.4s ease, color 0.4s ease;
-            position: relative;
-            overflow-x: hidden;
+            padding: 4px;
         }
-
-        body::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.04;
-            background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M0 50 L30 50 L40 20 L50 80 L60 45 L65 55 L70 50 L100 50' fill='none' stroke='%234f46e5' stroke-width='2'/%3E%3C/svg%3E"),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M25 10 H35 V25 H50 V35 H35 V50 H25 V35 H10 V25 H25 Z' fill='%234f46e5'/%3E%3C/svg%3E");
-            background-size: 300px 150px, 120px 120px;
-            background-position: 0 0, 50px 50px;
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid var(--accent);
         }
-
-        [data-theme="dark"]::before {
-            opacity: 0.02;
-            background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M0 50 L30 50 L40 20 L50 80 L60 45 L65 55 L70 50 L100 50' fill='none' stroke='%2338bdf8' stroke-width='2'/%3E%3C/svg%3E"),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M25 10 H35 V25 H50 V35 H35 V50 H25 V35 H10 V25 H25 Z' fill='%2338bdf8'/%3E%3C/svg%3E");
-        }
-
-        header {
-            background: var(--header-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: background 0.4s ease, border 0.4s ease;
-        }
-        .header-container {
-            max-width: 1140px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header-container h1 {
-            margin: 0;
-            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        h1 {
             font-size: 24px;
             font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        [data-theme="dark"] .header-container h1 {
-            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .theme-toggle-btn {
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 10px 14px;
-            border-radius: 14px;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s ease;
-            margin-right: 15px;
-        }
-        .theme-toggle-btn:hover {
-            transform: scale(1.05);
-            border-color: var(--primary);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-        }
-
-        .admin-link {
-            background: var(--dark);
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 14px;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
-        }
-        [data-theme="dark"] .admin-link {
-            background: var(--primary);
-        }
-        .admin-link:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        .main-container {
-            max-width: 1140px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            gap: 35px;
-        }
-        @media (max-width: 912px) {
-            .main-container { grid-template-columns: 1fr; gap: 25px; margin: 20px auto; }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border);
-            backdrop-filter: blur(10px);
-            margin-bottom: 25px;
-            transition: all 0.4s ease, transform 0.3s ease;
-        }
-        .card:hover {
-            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.08);
-        }
-        .doctor-banner {
-            background: var(--banner-bg);
-            border-left: 5px solid var(--primary);
-            padding: 20px;
-            border-radius: 18px;
-            margin-top: 18px;
-            font-size: 14.5px;
-            line-height: 1.6;
-            color: var(--banner-text);
-            transition: all 0.4s ease;
-        }
-
-        /* --- OYNA TOʻLIB KETMASLIGI UCHUN FLEX-WRAP QILINDI --- */
-        .date-filter-container {
-            display: flex;
-            flex-wrap: wrap; /* Yonma-yon sig'magani chiroyli bo'lib pastga tushadi */
-            gap: 12px;
-            padding: 8px 4px 18px 4px;
-            margin-bottom: 25px;
-            border-bottom: 1px dashed var(--border);
-        }
-
-        .date-tab-btn {
-            padding: 12px 24px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 14px;
-            white-space: nowrap;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--gray-text);
-        }
-        .date-tab-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: var(--primary-light);
-        }
-        .date-tab-btn.active {
-            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
-        }
-
-        /* UCH NUQTA TUGMASI STILI */
-        #more-days-btn {
-            font-size: 20px;
-            line-height: 10px;
-            padding: 12px 28px;
-            background: var(--input-bg);
-            color: var(--primary);
-            border: 2px dashed var(--primary);
-        }
-        #more-days-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-style: solid;
-        }
-
-        .slots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
-            gap: 14px;
-            margin-top: 20px;
-        }
-        .slot-btn {
-            padding: 16px 12px;
             text-align: center;
-            border-radius: 20px;
-            border: 2px solid var(--success);
-            background: var(--success-bg);
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-main);
+            color: var(--primary);
+            margin-bottom: 5px;
         }
-        .slot-btn .status-text {
-            transition: color 0.4s ease;
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 14px;
         }
-        .slot-btn:hover:not([disabled]) {
-            transform: translateY(-3px) scale(1.02);
-            border-color: var(--success-hover);
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2);
-        }
-        .slot-btn.active {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-            color: white !important;
-            border-color: transparent !important;
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.35) !important;
-        }
-        .slot-btn.active div {
-            color: rgba(255, 255, 255, 0.9) !important;
-        }
-        .slot-btn[disabled] {
-            background: var(--danger-bg);
-            color: #991b1b;
-            cursor: not-allowed;
-            border-color: #fca5a5;
-            opacity: 0.55;
-        }
-        [data-theme="dark"] .slot-btn[disabled] {
-            color: #fca5a5;
-        }
-
         .form-group {
             margin-bottom: 20px;
         }
-        .form-group label {
+        label {
             display: block;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-main);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            opacity: 0.9;
-        }
-        .form-control {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid var(--border);
-            border-radius: 16px;
-            box-sizing: border-box;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            background: var(--input-bg);
-            color: var(--text-main);
-        }
-        .form-control:focus {
-            border-color: var(--primary);
-            outline: none;
-            background: var(--card-bg);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
-        }
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(79, 70, 229, 0.45);
-        }
-
-        .alert {
-            padding: 16px;
-            border-radius: 16px;
-            margin-bottom: 25px;
             font-weight: 600;
-            font-size: 14.5px;
-            border: 1px solid transparent;
+            margin-bottom: 8px;
+            font-size: 14px;
         }
-        .alert-success { background: var(--success-bg); color: #065f46; border-color: #a7f3d0; }
-        .alert-error { background: var(--danger-bg); color: #991b1b; border-color: #fca5a5; }
-        [data-theme="dark"] .alert-success { color: #a7f3d0; }
-        [data-theme="dark"] .alert-error { color: #fca5a5; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>🏛️ Toshloq tuman hokimligi</h1>
+        <div class="subtitle">Hokim qabuliga onlayn navbat olish elektron platformasi</div>
 
-    <header>
-        <div class="header-container">
-            <div>
-                <h1>Dr. Akmalov LOR</h1>
-                <div style="font-size: 12px; color: var(--gray-text); font-weight: 500; margin-top: 4px;">Oliy toifali shifokor-otolaringolog qabuli</div>
-            </div>
-            <div class="header-actions">
-                <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Rejimni almashtirish">🌓</button>
-                <a href="/admin" target="_blank" class="admin-link">Tizimga kirish</a>
-            </div>
-        </div>
-    </header>
-
-    <main class="main-container">
-
-        <div>
-            <div class="card">
-                <h2 style="margin: 0; font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px;">Zamonaviy LOR Diagnostikasi</h2>
-                <div class="doctor-banner">
-                    <strong>15 yillik tajriba:</strong> Klinikamizda quloq, burun va tomoq kasalliklari eng soʻnggi rusumdagi video-endoskopik uskunalar yordamida aniqlanadi va samarali davolanadi. Navbatingizni onlayn band qiling va vaqtingizni tejang.
-                </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Fuqaro F.I.O (To'liq ism-sharifingiz):</label>
+                <input type="text" id="name" name="patient_name" required placeholder="Masalan: Asrorxo'ja Aliyev">
             </div>
 
-            <div class="card">
-                <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 700;">Mavjud boʻsh vaqtlar</h3>
-
-                {% if dates %}
-                    <p style="font-size: 13px; color: var(--gray-text); margin-bottom: 12px; font-weight: 500;">1. Sanani tanlang:</p>
-                    <div class="date-filter-container" id="date-tabs-wrapper">
-                        <button type="button" class="date-tab-btn active" id="all-dates-btn" onclick="filterDate('all', this)">Barchasi</button>
-                        {% for d in dates %}
-                            <button type="button" class="date-tab-btn individual-date-btn" onclick="filterDate('date-{{ d|date:"Y-m-d" }}', this)">
-                                {{ d|date:"j-F" }}
-                            </button>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                <p style="font-size: 13px; color: var(--gray-text); margin-bottom: 15px; font-weight: 500;">2. Oʻzingizga qulay vaqt ustiga bosing:</p>
-
-                {% if slots %}
-                    <div class="slots-grid">
-                        {% for slot in slots %}
-                            <button type="button"
-                                    class="slot-btn"
-                                    id="btn-slot-{{ slot.id }}"
-                                    data-date="date-{{ slot.date|date:"Y-m-d" }}"
-                                    {% if slot.is_booked %} disabled {% endif %}
-                                    data-slot-id="{{ slot.id }}"
-                                    onclick="selectSlot(this)">
-                                <div class="kun-tekst" style="font-size: 10px; font-weight: 700; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px;">{{ slot.date|date:"j-F" }}</div>
-                                <div class="soat-tekst" style="font-size: 22px; font-weight: 800; margin: 4px 0; letter-spacing: -0.5px;">{{ slot.time|time:"H:i" }}</div>
-
-                                <div style="font-size: 11px; font-weight: 700; color: {% if slot.is_booked %}var(--danger){% else %}var(--success-hover){% endif %};" class="status-text">
-                                    {% if slot.is_booked %}Band{% else %}Boʻsh{% endif %}
-                                </div>
-                            </button>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p style="color: var(--gray-text); font-size: 14px; text-align: center; padding: 30px; font-weight: 500;">Hozircha qabul vaqtlari belgilanmagan. Shifokor tez orada vaqtlarni qoʻshadi.</p>
-                {% endif %}
+            <div class="form-group">
+                <label for="phone">Telefon raqamingiz:</label>
+                <input type="tel" id="phone" name="phone_number" required placeholder="+998 (90) 123-45-67">
             </div>
-        </div>
 
-        <div>
-            <div class="card" style="position: sticky; top: 110px;">
-                <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 800; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px;">Navbatga yozilish</h3>
-
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="slot_id" id="selected_slot_id">
-
-                    <div class="form-group">
-                        <label>Tanlangan qabul vaqti</label>
-                        <input type="text" id="selected_slot_text" readonly required placeholder="Vaqtni chapdan tanlang 👈"
-                               class="form-control" style="font-weight: 700; color: var(--primary); background: var(--primary-light); border-color: var(--primary);">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Ism va Familiyangiz *</label>
-                        <input type="text" name="name" required placeholder="Masalan: Dilshodbek" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Telefon raqamingiz *</label>
-                        <input type="text" name="phone" required placeholder="+998 90 123 45 67" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Shikoyatingiz (ixtiyoriy)</label>
-                        <textarea name="complaint" rows="3" placeholder="Tomoq ogʻrigʻi, burun bitishi..." class="form-control" style="resize: none;"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Navbatni tasdiqlash</button>
-                </form>
+            <div class="form-group">
+                <label for="desc">Murojaat mazmuni (qisqacha):</label>
+                <textarea id="desc" name="description" rows="3" placeholder="Murojaat yoki muammoingiz haqida qisqacha yozing..."></textarea>
             </div>
-        </div>
 
-    </main>
-
-    <script src="https://unpkg.com/imask"></script>
-
-    <script>
-        // --- TUNGI VA KUNGI REJIM LOGIKASI (DARK/LIGHT MODE) ---
-        const themeToggleBtn = document.getElementById('theme-toggle');
-
-        const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-        if (currentTheme) {
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            if (currentTheme === 'dark') {
-                themeToggleBtn.innerText = '☀️';
-            }
-        }
-
-        themeToggleBtn.addEventListener('click', function() {
-            let theme = document.documentElement.getAttribute('data-theme');
-            if (theme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-                themeToggleBtn.innerText = '🌓';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                themeToggleBtn.innerText = '☀️';
-            }
-        });
-
-        // --- IMASK VA FORMA LOGIKASI ---
-        let phoneMask;
-        document.addEventListener("DOMContentLoaded", function () {
-            const phoneInput = document.querySelector('input[name="phone"]');
-            if (phoneInput) {
-                const maskOptions = {
-                    mask: '+998 (00) 000-00-00',
-                    lazy: false
-                };
-                phoneMask = IMask(phoneInput, maskOptions);
-            }
-
-            const form = document.querySelector('form');
-            if (form) {
-                form.addEventListener('submit', function() {
-                    if (phoneMask) {
-                        phoneInput.value = phoneMask.unmaskedValue;
-                    }
-                });
-            }
-
-            // Sahifa yuklanganda paginatsiyani ishga tushirish
-            setupDatePagination();
-
-            const activeTab = document.querySelector('.date-tab-btn.active');
-            if (activeTab) {
-                filterDate('all', activeTab);
-            }
-        });
-
-        // --- OCHILIB-YOPILADIGAN 5 KUNLIK TOGGLE LOGIKASI ---
-        let isExpanded = false; // Boshida yopilgan (faqat 5 kun ochiq)
-
-        function setupDatePagination() {
-            const container = document.getElementById('date-tabs-wrapper');
-            if (!container) return;
-
-            // Oldingi "..." tugmasi bo'lsa uni o'chiramiz
-            const existingMoreBtn = document.getElementById('more-days-btn');
-            if (existingMoreBtn) existingMoreBtn.remove();
-
-            const dateButtons = document.querySelectorAll('.individual-date-btn');
-
-            // Holatga qarab kunlarni ko'rsatamiz yoki yashiramiz
-            dateButtons.forEach((btn, index) => {
-                if (isExpanded) {
-                    // Agar ochiq bo'lsa, hamma 30 kunlik tugmalar chiqadi (pastga chiroyli tushib)
-                    btn.style.display = 'inline-block';
-                } else {
-                    // Yopilgan bo'lsa, faqat birinchi 5 kun chiqadi
-                    if (index < 5) {
-                        btn.style.display = 'inline-block';
-                    } else {
-                        btn.style.display = 'none';
-                    }
-                }
-            });
-
-            // "..." tugmasini doim ro'yxat oxiriga qo'shib qo'yamiz (agar jami kunlar 5 tadan ko'p bo'lsa)
-            if (dateButtons.length > 5) {
-                const moreBtn = document.createElement('button');
-                moreBtn.type = 'button';
-                moreBtn.id = 'more-days-btn';
-                moreBtn.className = 'date-tab-btn';
-                moreBtn.innerText = '...';
-
-                // Bosilganda holatni teskarisiga o'zgartiradi (Toggle logikasi)
-                moreBtn.onclick = function() {
-                    isExpanded = !isExpanded; // true -> false yoki false -> true
-                    setupDatePagination();    // Kalendarni qayta chizish
-                };
-
-                container.appendChild(moreBtn);
-            }
-        }
-
-        // --- FILTR LOGIKASI ---
-        function filterDate(dateClass, element) {
-            const tabs = document.querySelectorAll('.date-tab-btn');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            element.classList.add('active');
-
-            const slots = document.querySelectorAll('.slot-btn');
-            slots.forEach(slot => {
-                if (dateClass === 'all') {
-                    slot.style.display = 'flex';
-                } else {
-                    if (slot.getAttribute('data-date') === dateClass) {
-                        slot.style.display = 'flex';
-                    } else {
-                        slot.style.display = 'none';
-                    }
-                }
-            });
-        }
-
-        function selectSlot(element) {
-            const id = element.getAttribute('data-slot-id');
-            const kunMatni = element.querySelector('.kun-tekst').innerText;
-            const soatMatni = element.querySelector('.soat-tekst').innerText;
-            const fullText = kunMatni + " | soat " + soatMatni;
-
-            document.getElementById('selected_slot_id').value = id;
-            document.getElementById('selected_slot_text').value = fullText;
-
-            const buttons = document.querySelectorAll('.slot-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            element.classList.add('active');
-        }
-    </script>
+            <button type="submit" class="btn">Qabulga yozilish (Navbat olish) 🗓️</button>
+        </form>
+    </div>
 </body>
 </html>

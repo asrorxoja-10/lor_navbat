@@ -7,29 +7,29 @@ from django.utils.html import format_html  # Tugmalarni xavfsiz render qilish uc
 import datetime
 from .models import TimeSlot
 
-# --- ADMIN PANEL INTERFEYSINI BRENDLASH ---
-admin.site.site_header = "Dr. Akmalov LOR | Admin Boshqaruv"
-admin.site.site_title = "Shifokor Paneli"
-admin.site.index_title = "Tizim ma'lumotlari boshqaruvi"
+# --- ADMIN PANEL INTERFEYSINI TOSLOQ TUMAN HOKIMLIGIGA MOSLASH ---
+admin.site.site_header = "🏛️ Toshloq tuman hokimligi qabulxona tizimi"
+admin.site.site_title = "Toshloq tuman hokimi qabuli"
+admin.site.index_title = "Fuqarolar murojaatlari va qabul navbatlari"
 
 
-# Avtomatik vaqt yaratish uchun maxsus forma
+# Avtomatik qabul vaqtlarini yaratish uchun maxsus forma
 class SlotGeneratorForm(forms.Form):
     date = forms.DateField(
-        label="Qabul sanasi",
+        label="Qabul sanasi (Kuni)",
         widget=forms.SelectDateWidget(),
         initial=datetime.date.today
     )
     start_time = forms.TimeField(
-        label="Ish boshlanish vaqti",
+        label="Qabul boshlanish vaqti",
         initial=datetime.time(9, 0)  # standart 09:00
     )
     end_time = forms.TimeField(
-        label="Ish tugash vaqti",
+        label="Qabul tugash vaqti",
         initial=datetime.time(17, 0)  # standart 17:00
     )
     duration_minutes = forms.IntegerField(
-        label="Har bir bemorga ajratiladigan vaqt (minutda)",
+        label="Har bir fuqaroga ajratiladigan qabul vaqti (daqiqada)",
         initial=30,
         min_value=5
     )
@@ -37,20 +37,20 @@ class SlotGeneratorForm(forms.Form):
 
 @admin.register(TimeSlot)
 class TimeSlotAdmin(admin.ModelAdmin):
-    # Jadvalda chiroyli ko'rinishi uchun go_to_dashboard ham qo'shildi
+    # Jadvalda chiroyli ko'rinishi uchun ustunlar
     list_display = ('date', 'time', 'is_booked', 'go_to_dashboard')
     list_filter = ('date', 'is_booked')
     ordering = ('date', 'time')
 
-    # Admin panelga yangi tugma va sahifa havolasini qo'shamiz
+    # Admin panelga maxsus tugma qo'shish andozasi
     change_list_template = "admin/appointments_change_list.html"
 
-    # Har bir qator yonida maxsus dizayndagi "Dashboard"ga o'tish tugmasi
+    # Har bir qator yonida joylashgan "Onlayn Jadval"ga o'tish tugmasi (Hokimlik ko'k ranggi)
     def go_to_dashboard(self, obj):
         return format_html(
-            '<a class="button" style="background-color: #4f46e5; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 600; text-decoration: none;" href="/dashboard/">Jadvalni ko\'rish 📊</a>'
+            '<a class="button" style="background-color: #1e3a8a; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 600; text-decoration: none;" href="/dashboard/">Jadvalni ko\'rish 📊</a>'
         )
-    go_to_dashboard.short_description = "Onlayn Navbatlar"
+    go_to_dashboard.short_description = "Onlayn Navbatlar oynasi"
 
     def get_urls(self):
         urls = super().get_urls()
@@ -59,7 +59,7 @@ class TimeSlotAdmin(admin.ModelAdmin):
         ]
         return custom_urls + urls
 
-    # Vaqtni yaratish logikasi (Backend)
+    # Qabul vaqtlarini tuman hokimi jadvali uchun avtomatik generatsiya qilish logikasi
     def generate_slots_view(self, request):
         if request.method == 'POST':
             form = SlotGeneratorForm(request.POST)
@@ -69,7 +69,7 @@ class TimeSlotAdmin(admin.ModelAdmin):
                 end_time = form.cleaned_data['end_time']
                 duration = form.cleaned_data['duration_minutes']
 
-                # Vaqtlarni hisoblash boshlanadi
+                # Vaqtlarni avtomatik rejalashtirish zanjiri
                 current_datetime = datetime.datetime.combine(date, start_time)
                 end_datetime = datetime.datetime.combine(date, end_time)
 
@@ -77,21 +77,21 @@ class TimeSlotAdmin(admin.ModelAdmin):
                 while current_datetime < end_datetime:
                     slot_time = current_datetime.time()
 
-                    # Agar bu vaqt oldindan bazada bo'lmasa, yangi ochamiz
+                    # Agar bu vaqt oldindan tuman hokimi qabul jadvalida bo'lmasa, yangi ochamiz
                     if not TimeSlot.objects.filter(date=date, time=slot_time).exists():
                         TimeSlot.objects.create(date=date, time=slot_time, is_booked=False)
                         slots_created += 1
 
-                    # Keyingi slot vaqtiga o'tish (+30 minut yoki berilgan muddat)
+                    # Keyingi fuqaroning qabul vaqtiga o'tish
                     current_datetime += datetime.timedelta(minutes=duration)
 
                 self.message_user(request,
-                                  f"Muvaffaqiyatli: {date} sana uchun {slots_created} ta qabul vaqti yaratildi!")
+                                  f"Muvaffaqiyatli: Toshloq tuman hokimi qabuli uchun {date} sanasiga {slots_created} ta yangi bo'sh vaqt jadvali yaratildi!")
                 return HttpResponseRedirect("../")
         else:
             form = SlotGeneratorForm()
 
         context = self.admin_site.each_context(request)
         context['form'] = form
-        context['title'] = "Avtomatik Vaqt Generator boti"
+        context['title'] = "Toshloq tuman hokimi qabuli - Avtomatik Vaqt Generator tizimi"
         return render(request, "admin/generate_slots.html", context)
