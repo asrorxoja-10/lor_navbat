@@ -6,60 +6,87 @@
     <title>Toshloq tuman hokimi qabuliga onlayn navbat olish</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Standart yorug' rejim ranglari */
+        /* Hokimiyat darajasidagi Premium ranglar va fon tizimi */
         :root {
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
+            --bg: #f0f4f8;
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-main: #0f172a;
-            --text-muted: #64748b;
+            --text-muted: #475569;
             --border: #cbd5e1;
             --input-bg: #ffffff;
-            --primary: #1e3a8a; /* Hokimiyat ko'k rangi */
-            --accent: #d97706;  /* Oltinrang liniya */
+            --primary: #1e3a8a; /* Davlat ramziy to'q ko'k rangi */
+            --accent: #d97706;  /* Oltinrang chiziq */
+            --shadow: rgba(30, 58, 138, 0.15);
+
+            /* Yorug' rejim uchun milliy naqsh va geometrik fon */
+            --pattern-color: rgba(30, 58, 138, 0.03);
+            --bg-gradient: radial-gradient(circle at top right, rgba(217, 119, 6, 0.08) 0%, transparent 40%),
+                           radial-gradient(circle at bottom left, rgba(30, 58, 138, 0.08) 0%, transparent 50%);
         }
 
-        /* Qorong'u rejim ranglari */
         [data-theme="dark"] {
-            --bg: #0f172a;
-            --card-bg: #1e293b;
+            --bg: #0b1329;
+            --card-bg: rgba(30, 41, 59, 0.95);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border: #334155;
             --input-bg: #1e293b;
-            --primary: #38bdf8; /* Qorong'u rejimda yorqinroq ko'k */
+            --primary: #38bdf8;
+            --shadow: rgba(0, 0, 0, 0.5);
+
+            /* Qorong'u rejim uchun fon elementlari */
+            --pattern-color: rgba(56, 189, 248, 0.02);
+            --bg-gradient: radial-gradient(circle at top right, rgba(217, 119, 6, 0.15) 0%, transparent 45%),
+                           radial-gradient(circle at bottom left, rgba(15, 23, 42, 0.8) 0%, transparent 60%);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
+            background-image: var(--bg-gradient),
+                              /* SVG orqali yaratilgan silliq milliy giloslangan naqsh */
+                              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%231e3a8a' fill-opacity='0.03'%3E%3Cpath d='M40 0l40 40-40 40L0 40zM40 10L10 40l30 30 30-30z'/%3E%3Ccircle cx='40' cy='40' r='5'/%3E%3C/g%3E%3C/svg%3E");
             color: var(--text-main);
             margin: 0;
-            padding: 10px;
-            transition: background-color 0.2s, color 0.2s;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, color 0.3s;
+            box-sizing: border-box;
         }
+
+        /* Qorong'u rejimda naqsh rangini moslashtirish */
+        [data-theme="dark"] body {
+            background-image: var(--bg-gradient),
+                              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%3C38bdf8' fill-opacity='0.02'%3E%3Cpath d='M40 0l40 40-40 40L0 40zM40 10L10 40l30 30 30-30z'/%3E%3Ccircle cx='40' cy='40' r='5'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
         .container {
+            width: 100%;
             max-width: 550px;
-            margin: 50px auto;
             background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 40px 35px;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px var(--shadow), 0 10px 10px -5px var(--shadow);
             border-top: 6px solid var(--accent);
             position: relative;
-            transition: background-color 0.2s;
+            backdrop-filter: blur(8px); /* Orqa fonni chiroyli xiralashtirish effecti */
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         /* Rejimni o'zgartirish tugmasi */
         .theme-toggle {
             position: absolute;
             top: 20px;
-            right: 20px;
-            background: var(--bg);
+            right: 25px;
+            background: transparent;
             border: 1px solid var(--border);
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-main);
             display: flex;
@@ -68,66 +95,85 @@
             transition: all 0.2s;
         }
         .theme-toggle:hover {
-            opacity: 0.9;
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
         h1 {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
             text-align: center;
             color: var(--primary);
-            margin: 20px 0 5px 0;
-            transition: color 0.2s;
+            margin: 15px 0 6px 0;
+            letter-spacing: -0.5px;
         }
         .subtitle {
             text-align: center;
             color: var(--text-muted);
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             font-size: 14px;
+            font-weight: 500;
         }
+
         .alert {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 22px;
             font-size: 14px;
             font-weight: 600;
             text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
-        .alert-success { background-color: #dcfce7; color: #15803d; }
-        [data-theme="dark"] .alert-success { background-color: #064e3b; color: #6ee7b7; }
-        .alert-error { background-color: #fee2e2; color: #b91c1c; }
-        [data-theme="dark"] .alert-error { background-color: #4c1d1d; color: #fca5a5; }
+        .alert-success { background-color: #dcfce7; color: #15803d; border-left: 4px solid #22c55e; }
+        [data-theme="dark"] .alert-success { background-color: #064e3b; color: #a7f3d0; border-left: 4px solid #10b981; }
+        .alert-error { background-color: #fee2e2; color: #b91c1c; border-left: 4px solid #ef4444; }
+        [data-theme="dark"] .alert-error { background-color: #4c1d1d; color: #fca5a5; border-left: 4px solid #ef4444; }
 
-        .form-group { margin-bottom: 18px; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: var(--text-main); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: var(--text-main); }
 
         input, textarea, select {
             width: 100%;
-            padding: 12px;
+            padding: 13px 16px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
             background-color: var(--input-bg);
             color: var(--text-main);
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
-        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+        }
+        [data-theme="dark"] input:focus, [data-theme="dark"] textarea:focus, [data-theme="dark"] select:focus {
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
 
         .btn {
             background-color: var(--primary);
-            color: white;
-            padding: 14px;
+            color: #ffffff;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             width: 100%;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.2s;
+            box-shadow: 0 4px 6px -1px var(--shadow);
+            transition: all 0.2s ease;
+            margin-top: 10px;
         }
-        .btn:hover { opacity: 0.9; }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px -2px var(--shadow);
+            filter: brightness(1.1);
+        }
+        .btn:active { transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -185,7 +231,7 @@
         const icon = document.getElementById('modeIcon');
         const text = document.getElementById('modeText');
 
-        // Brauzer xotirasidan rejimni tekshirish
+        // Brauzer xotirasidan saqlangan rejimni tekshirish
         const savedTheme = localStorage.getItem('site-theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateInterface(savedTheme);
