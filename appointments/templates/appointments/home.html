@@ -6,32 +6,36 @@
     <title>Toshloq tuman hokimi qabuliga onlayn navbat olish</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* Standart yorug' rejim ranglari */
         :root {
-            --primary: #1e3a8a; /* Hokimiyat rasmiy ko'k rangi */
-            --accent: #d97706;  /* Oltinrang liniya */
             --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text: #0f172a;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
             --border: #cbd5e1;
             --input-bg: #ffffff;
+            --primary: #1e3a8a; /* Hokimiyat ko'k rangi */
+            --accent: #d97706;  /* Oltinrang liniya */
         }
 
-        /* Qorong'u rejim (Dark Mode) ranglari */
+        /* Qorong'u rejim ranglari */
         [data-theme="dark"] {
             --bg: #0f172a;
             --card-bg: #1e293b;
-            --text: #f8fafc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
             --border: #334155;
             --input-bg: #1e293b;
+            --primary: #38bdf8; /* Qorong'u rejimda yorqinroq ko'k */
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
+            color: var(--text-main);
             margin: 0;
             padding: 10px;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.2s, color 0.2s;
         }
         .container {
             max-width: 550px;
@@ -42,32 +46,29 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             border-top: 6px solid var(--accent);
             position: relative;
-            transition: background-color 0.3s;
+            transition: background-color 0.2s;
         }
 
-        /* Rejimni o'zgartirish tugmasi dizayni */
+        /* Rejimni o'zgartirish tugmasi */
         .theme-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: none;
+            background: var(--bg);
             border: 1px solid var(--border);
-            padding: 8px 12px;
+            padding: 8px 14px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            color: var(--text);
+            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 5px;
-            transition: background-color 0.2s;
+            gap: 6px;
+            transition: all 0.2s;
         }
         .theme-toggle:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-        [data-theme="dark"] .theme-toggle:hover {
-            background-color: rgba(255,255,255,0.05);
+            opacity: 0.9;
         }
 
         h1 {
@@ -76,13 +77,11 @@
             text-align: center;
             color: var(--primary);
             margin: 20px 0 5px 0;
-        }
-        [data-theme="dark"] h1 {
-            color: #38bdf8; /* Qorong'u rejimda sarlavha ochroq ko'k bo'ladi */
+            transition: color 0.2s;
         }
         .subtitle {
             text-align: center;
-            color: #64748b;
+            color: var(--text-muted);
             margin-bottom: 25px;
             font-size: 14px;
         }
@@ -100,7 +99,8 @@
         [data-theme="dark"] .alert-error { background-color: #4c1d1d; color: #fca5a5; }
 
         .form-group { margin-bottom: 18px; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: var(--text-main); }
+
         input, textarea, select {
             width: 100%;
             padding: 12px;
@@ -110,20 +110,30 @@
             font-family: inherit;
             font-size: 14px;
             background-color: var(--input-bg);
-            color: var(--text);
-            transition: border-color 0.2s, background-color 0.3s, color 0.3s;
+            color: var(--text-main);
+            transition: all 0.2s;
         }
         input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); }
-        .btn { background-color: var(--primary); color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-size: 16px; font-weight: 600; cursor: pointer; }
-        .btn:hover { background-color: #1e40af; }
-        [data-theme="dark"] .btn { background-color: #0284c7; }
-        [data-theme="dark"] .btn:hover { background-color: #0369a1; }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
     </style>
 </head>
 <body>
     <div class="container">
-        <button type="button" class="theme-toggle" id="themeToggle">
-            <span id="themeIcon">🌙</span> <span id="themeText">Qorong'u</span>
+        <button type="button" class="theme-toggle" id="modeSwitcher">
+            <span id="modeIcon">🌙</span> <span id="modeText">Qorong'u</span>
         </button>
 
         <h1>🏛️ Toshloq tuman hokimligi</h1>
@@ -161,7 +171,7 @@
                     {% for slot in slots %}
                         <option value="{{ slot.id }}">{{ slot.date|date:"d-m-Y" }} | Soat: {{ slot.time|time:"H:i" }}</option>
                     {% empty %}
-                        <option value="">Hozircha bo'sh qabul vaqtlari vaqti mavjud emas</option>
+                        <option value="">Hozircha bo'sh qabul vaqtlari mavjud emas</option>
                     {% endfor %}
                 </select>
             </div>
@@ -171,31 +181,31 @@
     </div>
 
     <script>
-        const toggleBtn = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
+        const btn = document.getElementById('modeSwitcher');
+        const icon = document.getElementById('modeIcon');
+        const text = document.getElementById('modeText');
 
-        // Brauzer xotirasida saqlangan rejimni tekshirish
-        const joriyRejim = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', joriyRejim);
-        rejimniYangila(joriyRejim);
+        // Brauzer xotirasidan rejimni tekshirish
+        const savedTheme = localStorage.getItem('site-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateInterface(savedTheme);
 
-        toggleBtn.addEventListener('click', () => {
-            let rejim = document.documentElement.getAttribute('data-theme');
-            let yangiRejim = rejim === 'dark' ? 'light' : 'dark';
+        btn.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-            document.documentElement.setAttribute('data-theme', yangiRejim);
-            localStorage.setItem('theme', yangiRejim);
-            rejimniYangila(yangiRejim);
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('site-theme', newTheme);
+            updateInterface(newTheme);
         });
 
-        function rejimniYangila(mode) {
-            if (mode === 'dark') {
-                themeIcon.textContent = '☀️';
-                themeText.textContent = 'Yorug\'';
+        function updateInterface(theme) {
+            if (theme === 'dark') {
+                icon.textContent = '☀️';
+                text.textContent = 'Yorug\'';
             } else {
-                themeIcon.textContent = '🌙';
-                themeText.textContent = 'Qorong\'u';
+                icon.textContent = '🌙';
+                text.textContent = 'Qorong\'u';
             }
         }
     </script>
