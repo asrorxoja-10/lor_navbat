@@ -31,12 +31,11 @@ def home_view(request):
             messages.error(request, "Kechirasiz, hozircha qabul uchun bo'sh vaqtlar qolmagan!")
             return redirect('home')
 
-        # ENG ASOSIY TEKSHIRUV: Agar vaqt band bo'lsa, qayta olishga yo'l qo'ymaydi
+        # Band qilingan vaqtni qayta olishni taqiqlash
         if slot.is_booked:
             messages.error(request, "Afsuski, bu vaqt allaqachon boshqa fuqaro tomonidan band qilingan!")
             return redirect('home')
 
-        # Navbatni yaratish
         Appointment.objects.create(
             slot=slot,
             patient_name=name,
@@ -44,7 +43,6 @@ def home_view(request):
             complaint=complaint
         )
 
-        # Vaqtni band holatga o'tkazish va saqlash
         slot.is_booked = True
         slot.save()
 
@@ -54,7 +52,7 @@ def home_view(request):
         messages.success(request, f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga muvaffaqiyatli navbat oldingiz.")
         return redirect('home')
 
-    # FAQAT band qilinmagan (is_booked=False) va kelajakdagi vaqtlar ro'yxatini olish
+    # Faqat band bo'lmagan slotlarni shablonga chiqarish
     all_slots = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time')
     slots = [s for s in all_slots if not (s.date == bugun and s.time < hozirgi_vaqt)]
 
