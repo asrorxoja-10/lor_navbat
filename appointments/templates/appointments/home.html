@@ -17,7 +17,7 @@
             box-sizing: border-box;
             transition: background 0.3s ease, color 0.3s ease;
 
-            /* ORQA FONGA UZB GERBINI SHAFFOF QILIB JOYLASHTIRISH */
+            /* ORQA FON - SHAFFOF UZB GERBI */
             background-color: #f1f5f9 !important;
             background-image: linear-gradient(rgba(241, 245, 249, 0.88), rgba(241, 245, 249, 0.88)),
                               url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg") !important;
@@ -102,6 +102,16 @@
             box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15) !important;
         }
 
+        /* LOR USLUBIDAGI KLASSIK DROPDOWN OPTION STILI */
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
         .btn {
             background-color: #1e3a8a !important;
             color: #ffffff !important;
@@ -116,7 +126,7 @@
             margin-top: 10px;
         }
 
-        /* QORONG'U REJIMDA GERB SAKLANADI */
+        /* QORONG'U REJIM STILLARI */
         body.dark-mode {
             background-color: #0b1329 !important;
             background-image: linear-gradient(rgba(11, 19, 41, 0.93), rgba(11, 19, 41, 0.93)),
@@ -139,6 +149,9 @@
             background-color: #172445 !important;
             border-color: #2e3f69 !important;
             color: #f8fafc !important;
+        }
+        body.dark-mode select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
         }
         body.dark-mode input:focus, body.dark-mode textarea:focus, body.dark-mode select:focus { border-color: #38bdf8 !important; }
         body.dark-mode .btn { background-color: #0284c7 !important; }
