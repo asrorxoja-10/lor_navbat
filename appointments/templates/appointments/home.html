@@ -6,141 +6,139 @@
     <title>Toshloq tuman hokimi qabuliga onlayn navbat olish</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* YORUG' REJIM USLUBLARI (STANDART) */
+        /* STANDART YORUG' REJIM - PRESTIJ HOKIMIYAT STILI */
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 15px;
+            padding: 20px;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
-            transition: all 0.3s ease;
-
-            /* Hokimiyat uchun muhtasham dynamic gradient fon */
-            background: linear-gradient(135deg, #eef2f7 0%, #dfe7f0 50%, #cfdae8 100%);
-            color: #0f172a;
+            transition: background 0.3s ease, color 0.3s ease;
+            background: linear-gradient(135deg, #eef2f7 0%, #dfe7f0 50%, #cfdae8 100%) !important;
+            color: #0f172a !important;
         }
 
         .container {
             width: 100%;
             max-width: 530px;
-            background: #ffffff;
-            padding: 35px 30px;
+            background: #ffffff !important;
+            padding: 40px 30px;
             border-radius: 16px;
             box-shadow: 0 20px 25px -5px rgba(30, 58, 138, 0.15), 0 8px 10px -6px rgba(30, 58, 138, 0.1);
-            border-top: 6px solid #d97706; /* Oltinrang liniya */
+            border-top: 6px solid #d97706 !important; /* Oltinrang chiziq */
             position: relative;
-            transition: all 0.3s ease;
         }
 
         .theme-toggle {
             position: absolute;
             top: 20px;
             right: 25px;
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
+            background: #f1f5f9 !important;
+            border: 1px solid #cbd5e1 !important;
             padding: 6px 14px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
-            color: #0f172a;
+            color: #0f172a !important;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s;
         }
 
         h1 {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
             text-align: center;
-            color: #1e3a8a; /* Hokimiyat ko'k rangi */
+            color: #1e3a8a !important; /* Hokimiyat ko'k rangi */
             margin: 15px 0 5px 0;
         }
         .subtitle {
             text-align: center;
-            color: #475569;
-            margin-bottom: 25px;
-            font-size: 13px;
-            font-weight: 500;
+            color: #475569 !important;
+            margin-bottom: 30px;
+            font-size: 13.5px;
         }
 
         .alert {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 22px;
             font-size: 14px;
             font-weight: 600;
             text-align: center;
         }
-        .alert-success { background-color: #dcfce7; color: #15803d; }
-        .alert-error { background-color: #fee2e2; color: #b91c1c; }
+        .alert-success { background-color: #dcfce7 !important; color: #15803d !important; border-left: 4px solid #22c55e !important; }
+        .alert-error { background-color: #fee2e2 !important; color: #b91c1c !important; border-left: 4px solid #ef4444 !important; }
 
-        .form-group { margin-bottom: 18px; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: #0f172a; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #0f172a !important; }
 
         input, textarea, select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            padding: 13px 16px;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 10px;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
-            background-color: #ffffff;
-            color: #0f172a;
-            transition: all 0.2s;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
         }
-        input:focus, textarea:focus, select:focus { outline: none; border-color: #1e3a8a; }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #1e3a8a !important;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15) !important;
+        }
 
         .btn {
-            background-color: #1e3a8a;
-            color: white;
-            padding: 14px;
+            background-color: #1e3a8a !important;
+            color: #ffffff !important;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             width: 100%;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 5px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            margin-top: 10px;
         }
-        .btn:hover { background-color: #1e40af; opacity: 0.95; }
 
-        /* QORONG'U REJIM USLUBLARI (DARK MODE) */
+        /* QORONG'U REJIM STILLARI (MAJBURIY OVERRIDE) */
         body.dark-mode {
-            background: linear-gradient(135deg, #060b14 0%, #0c152b 50%, #122142 100%);
-            color: #f8fafc;
+            background: linear-gradient(135deg, #060b14 0%, #0c152b 50%, #122142 100%) !important;
+            color: #f8fafc !important;
         }
         body.dark-mode .container {
-            background: #111c33;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+            background: #111c33 !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
         }
         body.dark-mode .theme-toggle {
-            background: #1a2642;
-            border-color: #2e3f69;
-            color: #f8fafc;
+            background: #172445 !important;
+            border-color: #2e3f69 !important;
+            color: #f8fafc !important;
         }
-        body.dark-mode h1 { color: #38bdf8; }
-        body.dark-mode .subtitle { color: #94a3b8; }
-        body.dark-mode label { color: #f8fafc; }
+        body.dark-mode h1 { color: #38bdf8 !important; }
+        body.dark-mode .subtitle { color: #94a3b8 !important; }
+        body.dark-mode label { color: #f8fafc !important; }
         body.dark-mode input, body.dark-mode textarea, body.dark-mode select {
-            background-color: #172445;
-            border-color: #2e3f69;
-            color: #f8fafc;
+            background-color: #172445 !important;
+            border-color: #2e3f69 !important;
+            color: #f8fafc !important;
         }
-        body.dark-mode input:focus, body.dark-mode textarea:focus, body.dark-mode select:focus { border-color: #38bdf8; }
-        body.dark-mode .btn { background-color: #0284c7; }
-        body.dark-mode .btn:hover { background-color: #0369a1; }
-        body.dark-mode .alert-success { background-color: #064e3b; color: #6ee7b7; }
-        body.dark-mode .alert-error { background-color: #4c1d1d; color: #fca5a5; }
+        body.dark-mode input:focus, body.dark-mode textarea:focus, body.dark-mode select:focus { border-color: #38bdf8 !important; }
+        body.dark-mode .btn { background-color: #0284c7 !important; }
+        body.dark-mode .alert-success { background-color: #064e3b !important; color: #a7f3d0 !important; }
+        body.dark-mode .alert-error { background-color: #4c1d1d !important; color: #fca5a5 !important; }
     </style>
 </head>
 <body>
+    <span style="display:none;" id="cache-buster">v={{ v }}</span>
+
     <div class="container">
         <button type="button" class="theme-toggle" id="modeSwitcher">
             <span id="modeIcon">🌙</span> <span id="modeText">Qorong'u</span>
@@ -196,7 +194,6 @@
         const text = document.getElementById('modeText');
         const body = document.body;
 
-        // Xotiradan rejimni tekshirish va darhol qo'llash
         const savedTheme = localStorage.getItem('site-theme') || 'light';
         if (savedTheme === 'dark') {
             body.classList.add('dark-mode');
@@ -206,7 +203,6 @@
 
         switcher.addEventListener('click', function() {
             body.classList.toggle('dark-mode');
-
             if (body.classList.contains('dark-mode')) {
                 localStorage.setItem('site-theme', 'dark');
                 icon.textContent = '☀️';
