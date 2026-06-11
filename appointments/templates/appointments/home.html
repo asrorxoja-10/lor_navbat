@@ -22,7 +22,6 @@
             overflow-x: hidden;
         }
 
-        /* GERB SIZ UCHUN MAXSUS ALOHIDA QATLAMDA ORQA FONGA QO'YILDI */
         body::before {
             content: "";
             position: fixed;
@@ -31,8 +30,8 @@
             transform: translate(-50%, -50%);
             width: 450px;
             height: 450px;
-            z-index: 1; /* Konteynerning orqasida turadi */
-            opacity: 0.18; /* Tiniqligi oshirildi, endi aniq ko'rinadi */
+            z-index: 1;
+            opacity: 0.18;
             pointer-events: none;
             background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/77/Emblem_of_Uzbekistan.svg");
             background-repeat: no-repeat;
@@ -50,7 +49,7 @@
             box-shadow: 0 20px 25px -5px rgba(30, 58, 138, 0.15), 0 8px 10px -6px rgba(30, 58, 138, 0.1);
             border-top: 6px solid #d97706 !important;
             position: relative;
-            z-index: 10; /* Gerbdan tepada turishi shart */
+            z-index: 10;
         }
 
         .theme-toggle {
@@ -115,7 +114,6 @@
             box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15) !important;
         }
 
-        /* 🆕 VAQT KARTALARI UCHUN ZAMONAVIY STILLAR */
         .slots-wrapper {
             max-height: 260px;
             overflow-y: auto;
@@ -167,7 +165,6 @@
             border-color: #cbd5e1 !important;
         }
 
-        /* Tanlangan yashil holat */
         .time-card.selected {
             background: #16a34a !important;
             color: #ffffff !important;
@@ -188,9 +185,19 @@
             cursor: pointer;
             box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
             margin-top: 10px;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* QORONG'U REJIM MOSLASHUVCHANLIGI */
+        .btn:disabled {
+            background-color: #64748b !important;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
         body.dark-mode {
             background-color: #0b1329 !important;
             color: #f8fafc !important;
@@ -220,7 +227,6 @@
         body.dark-mode .alert-success { background-color: #064e3b !important; color: #a7f3d0 !important; }
         body.dark-mode .alert-error { background-color: #4c1d1d !important; color: #fca5a5 !important; }
 
-        /* Qorong'u rejimda vaqt kartalari */
         body.dark-mode .slots-wrapper {
             border-color: #2e3f69;
             background: #172445 !important;
@@ -271,7 +277,7 @@
 
             <div class="form-group">
                 <label>Telefon raqamingiz:</label>
-                <input type="tel" name="phone_number" required placeholder="+998 (90) 123-45-67">
+                <input type="tel" name="phone_number" id="phone_input" required value="+998 ">
             </div>
 
             <div class="form-group">
@@ -305,7 +311,9 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn">Qabulga yozilish (Navbat olish) 🗓️</button>
+            <button type="submit" class="btn" id="submitBtn">
+                <span id="btnText">Qabulga yozilish (Navbat olish) 🗓️</span>
+            </button>
         </form>
     </div>
 
@@ -336,23 +344,64 @@
             }
         });
 
-        // 🆕 KARTALARDAN VAQT TANLASH LOGIKASI
+        // ⏱️ 1-INTEGRATSIYA: TELEFON RAQAM AQLLI MASKASI (+998 )
+        const phoneInput = document.getElementById('phone_input');
+
+        phoneInput.addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,2})(\d{0,3})(\d{0,2})(\d{0,2})/);
+
+            // Agar foydalanuvchi +998 ni o'chirib tashlamoqchi bo'lsa yo'l qo'ymaymiz
+            if (!x[1] || x[1] !== '998') {
+                e.target.value = '+998 ';
+                return;
+            }
+
+            e.target.value = '+998' +
+                (x[2] ? ' (' + x[2] : '') +
+                (x[2] && x[2].length === 2 ? ') ' : '') +
+                (x[3] ? x[3] : '') +
+                (x[4] ? '-' + x[4] : '') +
+                (x[5] ? '-' + x[5] : '');
+        });
+
+        phoneInput.addEventListener('keydown', function(e) {
+            // +998 qismini backspace bilan o'chirishni taqiqlash
+            if (e.key === 'Backspace' && e.target.value.length <= 6) {
+                e.preventDefault();
+            }
+        });
+
+        // KARTALARDAN VAQT TANLASH LOGIKASI
         document.addEventListener('DOMContentLoaded', function() {
             const timeCards = document.querySelectorAll('.time-card');
             const hiddenInput = document.getElementById('selected_slot_id');
 
             timeCards.forEach(card => {
                 card.addEventListener('click', function() {
-                    // Oldin tanlangan yashil kartani oddiy holatga qaytarish
                     timeCards.forEach(c => c.classList.remove('selected'));
-
-                    // Bosilgan yangi kartani yashil (selected) qilish
                     this.classList.add('selected');
-
-                    // Qiymatni yashirin inputga berish (views.py o'qib olishi uchun)
                     hiddenInput.value = this.getAttribute('data-slot-id');
                 });
             });
+        });
+
+        // ⏱️ 2-INTEGRATSIYA: YUKLANISH VA QAYTA BOSISHNING OLDINI OLISH
+        const form = document.getElementById('appointmentForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+
+        form.addEventListener('submit', function() {
+            // Vaqt tanlanganligini tekshirish
+            const slotId = document.getElementById('selected_slot_id').value;
+            if(!slotId) {
+                alert("Iltimos, qabul vaqtini tanlang!");
+                event.preventDefault();
+                return false;
+            }
+
+            // Tugmani bloklash va matnini o'zgartirish
+            submitBtn.disabled = true;
+            btnText.innerHTML = "Murojaat yuborilmoqda, iltimos kuting... ⏳";
         });
     </script>
 </body>
