@@ -13,43 +13,52 @@ def home_view(request):
     hozirgi_vaqt = hozir.time()
 
     if request.method == "POST":
+        # HTML formadan kelayotgan 'name' atributlari qiymatini olish
         name = request.POST.get('patient_name')
         phone = request.POST.get('phone_number')
         complaint = request.POST.get('description', '')
         slot_id = request.POST.get('slot_id')
 
-        # Maydonlarni tekshirish
+        # Maydonlar bo'shligini tekshirish
         if not name or not phone or not slot_id:
-            messages.error(request, "Iltimos, barcha maydonlarni to'ldiring va vaqtni tanlang!")
+            messages.error(request, "Iltimos, ism, telefon va vaqtni to'liq kiriting!")
             return redirect('home')
 
-        # Tanlangan vaqtni olish
-        slot = get_object_or_404(TimeSlot, id=slot_id)
+        try:
+            # Vaqt slotini olish
+            slot = TimeSlot.objects.get(id=slot_id)
 
-        # Vaqt bandligini tekshirish
-        if slot.is_booked:
-            messages.error(request, "Afsuski, bu vaqt allaqachon band qilingan! Boshqa vaqtni tanlang.")
+            # Agar vaqt allaqachon band bo'lsa yoki OneToOne bog'liqligi band bo'lsa
+            if slot.is_booked or hasattr(slot, 'appointment'):
+                messages.error(request, "Afsuski, bu vaqt band qilingan! Boshqa vaqt tanlang.")
+                return redirect('home')
+
+            # SIZNING MODELINGIZGA ASOSLANIB BAZAGA YOZISH (ENG ISHONCHLI USUL)
+            new_appointment = Appointment()
+            new_appointment.slot = slot
+            new_appointment.patient_name = name
+            new_appointment.patient_phone = phone
+            new_appointment.complaint = complaint
+            new_appointment.save()  # Bazaga yozildi!
+
+            # Vaqtni band deb belgilash
+            slot.is_booked = True
+            slot.save()
+
+            sana_matni = slot.date.strftime('%d-%m-%Y')
+            soat_matni = slot.time.strftime('%H:%M')
+
+            messages.success(request, f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga navbat oldingiz.")
             return redirect('home')
 
-        # BAZAGA SAQLASH (ENG ASOSIY QISM)
-        Appointment.objects.create(
-            slot=slot,
-            patient_name=name,
-            patient_phone=phone,
-            complaint=complaint
-        )
+        except TimeSlot.DoesNotExist:
+            messages.error(request, "Xatolik: Bunday qabul vaqti topilmadi!")
+            return redirect('home')
+        except Exception as e:
+            messages.error(request, f"Xatolik yuz berdi: {e}")
+            return redirect('home')
 
-        # Vaqtni band deb belgilash va saqlash
-        slot.is_booked = True
-        slot.save()
-
-        soat_matni = slot.time.strftime('%H:%M')
-        sana_matni = slot.date.strftime('%d-%m-%Y')
-
-        messages.success(request, f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga navbat oldingiz.")
-        return redirect('home')
-
-    # Faqat band bo'lmagan slotlarni shablonga chiqarish
+    # Faqat bugungi va kelajakdagi band bo'lmagan vaqtlar
     all_slots = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time')
     slots = [s for s in all_slots if not (s.date == bugun and s.time < hozirgi_vaqt)]
 
@@ -58,18 +67,17 @@ def home_view(request):
 
 @login_required(login_url='/admin/login/')
 def admin_dashboard_view(request):
-    # Arizani o'chirish
     if request.method == "POST" and "delete_id" in request.POST:
         appointment_id = request.POST.get("delete_id")
         app = get_object_or_404(Appointment, id=appointment_id)
         if app.slot:
-            app.slot.is_booked = False  # Vaqtni qayta bo'shatish
+            app.slot.is_booked = False  # Vaqtni qayta ochish
             app.slot.save()
         app.delete()
-        messages.success(request, "Murojaat muvaffaqiyatli o'chirildi va vaqt qayta ochildi!")
+        messages.success(request, "Murojaat muvaffaqiyatli o'chirildi!")
         return redirect('admin_dashboard')
 
-    # Barcha arizalarni olish
+    # Barcha arizalarni chiqarish
     appointments = Appointment.objects.select_related('slot').all().order_by('slot__date', 'slot__time')
     return render(request, 'appointments/admin_dashboard.html', {'appointments': appointments})
 
@@ -102,5 +110,5 @@ def generate_new_slots_view(request):
             joriy += interval
 
     TimeSlot.objects.bulk_create(yangi_slotlar)
-    messages.success(request, "30 kunlik yangi bo'sh qabul soatlari muvaffaqiyatli yaratildi!")
+    messages.success(request, "30 kunlik yangi qabul soatlari yaratildi!")
     return redirect('home')
