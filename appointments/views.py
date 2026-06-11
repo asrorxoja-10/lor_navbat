@@ -1,5 +1,7 @@
 import datetime
 from datetime import datetime as dt, date, time, timedelta
+import urllib.parse
+import urllib.request
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -13,7 +15,7 @@ def home_view(request):
     hozirgi_vaqt = hozir.time()
 
     if request.method == "POST":
-        # HTML formadan kelayotgan 'name' atributlari qiymatini olish
+        # HTML formadan kelayotgan qiymatlarni olish
         name = request.POST.get('patient_name')
         phone = request.POST.get('phone_number')
         complaint = request.POST.get('description', '')
@@ -28,18 +30,46 @@ def home_view(request):
             # Vaqt slotini olish
             slot = TimeSlot.objects.get(id=slot_id)
 
-            # Agar vaqt allaqachon band bo'lsa yoki OneToOne bog'liqligi band bo'lsa
+            # Agar vaqt allaqachon band bo'lsa
             if slot.is_booked or hasattr(slot, 'appointment'):
                 messages.error(request, "Afsuski, bu vaqt band qilingan! Boshqa vaqt tanlang.")
                 return redirect('home')
 
-            # SIZNING MODELINGIZGA ASOSLANIB BAZAGA YOZISH (ENG ISHONCHLI USUL)
+            # BAZAGA MUVAFFAQIYATLI YOZISH
             new_appointment = Appointment()
             new_appointment.slot = slot
             new_appointment.patient_name = name
             new_appointment.patient_phone = phone
             new_appointment.complaint = complaint
-            new_appointment.save()  # Bazaga yozildi!
+            new_appointment.save()
+
+            # 🚀 TELEGRAM BOT ORQALI XABARNOMA YUBORISH (SIZNING BOTINGIZ SOZLANDI)
+            try:
+                BOT_TOKEN = "8909170695:AAGHLEDm6j3k0cPA6Jj_8KdgjQ3rwFvSIik"
+                CHAT_ID = "6087478497"
+
+                sana_matni = slot.date.strftime('%d-%m-%Y')
+                soat_matni = slot.time.strftime('%H:%M')
+
+                # Telegramga boradigan rasmiy xabar matni
+                text = (
+                    f"🏛️ *YANGI MUROJAAT KELIB TUSHDI!*\n\n"
+                    f"👤 *Fuqaro F.I.O:* {name}\n"
+                    f"📞 *Telefon raqami:* {phone}\n"
+                    f"🗓️ *Belgilangan vaqt:* {sana_matni} | Soat: {soat_matni}\n"
+                    f"📝 *Murojaat mazmuni:* {complaint if complaint else 'Kiritilmagan'}"
+                )
+
+                # Telegram API orqali so'rov yuborish
+                encoded_text = urllib.parse.quote(text)
+                telegram_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID}&text={encoded_text}&parse_mode=Markdown"
+
+                req = urllib.request.Request(telegram_url, headers={'User-Agent': 'Mozilla/5.0'})
+                urllib.request.urlopen(req)
+            except Exception as telegram_error:
+                # Agar telegramda uzilish bo'lsa sayt qotib qolmasligi uchun xatoni o'tkazib yuboramiz
+                pass
+            # 🚀 TELEGRAM LOGIKASI TUGADI
 
             # Vaqtni band deb belgilash
             slot.is_booked = True
@@ -48,7 +78,8 @@ def home_view(request):
             sana_matni = slot.date.strftime('%d-%m-%Y')
             soat_matni = slot.time.strftime('%H:%M')
 
-            messages.success(request, f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga navbat oldingiz.")
+            messages.success(request,
+                             f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga navbat oldingiz.")
             return redirect('home')
 
         except TimeSlot.DoesNotExist:
@@ -77,7 +108,6 @@ def admin_dashboard_view(request):
         messages.success(request, "Murojaat muvaffaqiyatli o'chirildi!")
         return redirect('admin_dashboard')
 
-    # Barcha arizalarni chiqarish
     appointments = Appointment.objects.select_related('slot').all().order_by('slot__date', 'slot__time')
     return render(request, 'appointments/admin_dashboard.html', {'appointments': appointments})
 
