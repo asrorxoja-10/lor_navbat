@@ -15,8 +15,16 @@ ALLOWED_HOSTS = ['*']
 
 # WhiteNoise statik fayllar middleware'ni qo'shish uchun Render muhitida kerak
 if not DEBUG:
-    ALLOWED_HOSTS = [os.environ.get('RENDER_EXTERNAL_HOSTNAME', '*')]
+    ALLOWED_HOSTS = [os.environ.get('RENDER_EXTERNAL_HOSTNAME', '*'), 'lor-navbat.onrender.com']
 
+# --- CSRF VA PROXY SOZLAMALARI (403 FORBIDDEN XATOSINI TUZATISH) ---
+CSRF_TRUSTED_ORIGINS = [
+    'https://lor-navbat.onrender.com',
+]
+
+# Render proxy orqali HTTPS so'rovlarini to'g'ri tanib olish uchun
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# -----------------------------------------------------------------
 
 # Ilovalar ro'yxati
 INSTALLED_APPS = [
