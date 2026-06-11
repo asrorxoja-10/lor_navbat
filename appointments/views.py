@@ -93,5 +93,20 @@ def generate_new_slots_view(request):
 
 @login_required(login_url='/admin/login/')
 def admin_dashboard_view(request):
+    # Arizani o'chirish logikasi
+    if request.method == "POST" and "delete_id" in request.POST:
+        appointment_id = request.POST.get("delete_id")
+        app = get_object_or_404(Appointment, id=appointment_id)
+        # Vaqtni qaytadan bo'shatish (ixtiyoriy, agar o'chganda vaqt ochilishi kerak bo'lsa)
+        if app.slot:
+            app.slot.is_booked = False
+            app.slot.save()
+        app.delete()
+        messages.success(request, "Murojaat muvaffaqiyatli o'chirildi!")
+        return redirect('admin_dashboard')
+
+    # Arizani ko'rib chiqilgan deb belgilash logikasi (agar modelda status bo'lsa)
+    # Agar modelda status bo'lmasa, shunchaki o'chirish tugmasi ishlaydi.
+
     appointments = Appointment.objects.select_related('slot').all().order_by('slot__date', 'slot__time')
     return render(request, 'appointments/admin_dashboard.html', {'appointments': appointments})
