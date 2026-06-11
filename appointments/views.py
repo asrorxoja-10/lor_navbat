@@ -18,24 +18,20 @@ def home_view(request):
         complaint = request.POST.get('description', '')
         slot_id = request.POST.get('slot_id')
 
-        if not name or not phone:
-            messages.error(request, "Iltimos, barcha majburiy maydonlarni to'ldiring!")
+        # Maydonlarni tekshirish
+        if not name or not phone or not slot_id:
+            messages.error(request, "Iltimos, barcha maydonlarni to'ldiring va vaqtni tanlang!")
             return redirect('home')
 
-        if slot_id:
-            slot = get_object_or_404(TimeSlot, id=slot_id)
-        else:
-            slot = TimeSlot.objects.filter(date__gte=bugun, is_booked=False).order_by('date', 'time').first()
+        # Tanlangan vaqtni olish
+        slot = get_object_or_404(TimeSlot, id=slot_id)
 
-        if not slot:
-            messages.error(request, "Kechirasiz, hozircha qabul uchun bo'sh vaqtlar qolmagan!")
-            return redirect('home')
-
-        # Band qilingan vaqtni qayta olishni taqiqlash
+        # Vaqt bandligini tekshirish
         if slot.is_booked:
-            messages.error(request, "Afsuski, bu vaqt allaqachon boshqa fuqaro tomonidan band qilingan!")
+            messages.error(request, "Afsuski, bu vaqt allaqachon band qilingan! Boshqa vaqtni tanlang.")
             return redirect('home')
 
+        # BAZAGA SAQLASH (ENG ASOSIY QISM)
         Appointment.objects.create(
             slot=slot,
             patient_name=name,
@@ -43,13 +39,14 @@ def home_view(request):
             complaint=complaint
         )
 
+        # Vaqtni band deb belgilash va saqlash
         slot.is_booked = True
         slot.save()
 
         soat_matni = slot.time.strftime('%H:%M')
         sana_matni = slot.date.strftime('%d-%m-%Y')
 
-        messages.success(request, f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga muvaffaqiyatli navbat oldingiz.")
+        messages.success(request, f"Muvaffaqiyatli! Siz {sana_matni} kuni soat {soat_matni} dagi qabulga navbat oldingiz.")
         return redirect('home')
 
     # Faqat band bo'lmagan slotlarni shablonga chiqarish
@@ -57,6 +54,24 @@ def home_view(request):
     slots = [s for s in all_slots if not (s.date == bugun and s.time < hozirgi_vaqt)]
 
     return render(request, 'appointments/home.html', {'slots': slots})
+
+
+@login_required(login_url='/admin/login/')
+def admin_dashboard_view(request):
+    # Arizani o'chirish
+    if request.method == "POST" and "delete_id" in request.POST:
+        appointment_id = request.POST.get("delete_id")
+        app = get_object_or_404(Appointment, id=appointment_id)
+        if app.slot:
+            app.slot.is_booked = False  # Vaqtni qayta bo'shatish
+            app.slot.save()
+        app.delete()
+        messages.success(request, "Murojaat muvaffaqiyatli o'chirildi va vaqt qayta ochildi!")
+        return redirect('admin_dashboard')
+
+    # Barcha arizalarni olish
+    appointments = Appointment.objects.select_related('slot').all().order_by('slot__date', 'slot__time')
+    return render(request, 'appointments/admin_dashboard.html', {'appointments': appointments})
 
 
 def generate_new_slots_view(request):
@@ -87,26 +102,5 @@ def generate_new_slots_view(request):
             joriy += interval
 
     TimeSlot.objects.bulk_create(yangi_slotlar)
-    messages.success(request, "Toshloq tuman hokimi qabuli uchun 30 kunlik yeni qabul soatlari muvaffaqiyatli yaratildi!")
+    messages.success(request, "30 kunlik yangi bo'sh qabul soatlari muvaffaqiyatli yaratildi!")
     return redirect('home')
-
-
-@login_required(login_url='/admin/login/')
-def admin_dashboard_view(request):
-    # Arizani o'chirish logikasi
-    if request.method == "POST" and "delete_id" in request.POST:
-        appointment_id = request.POST.get("delete_id")
-        app = get_object_or_404(Appointment, id=appointment_id)
-        # Vaqtni qaytadan bo'shatish (ixtiyoriy, agar o'chganda vaqt ochilishi kerak bo'lsa)
-        if app.slot:
-            app.slot.is_booked = False
-            app.slot.save()
-        app.delete()
-        messages.success(request, "Murojaat muvaffaqiyatli o'chirildi!")
-        return redirect('admin_dashboard')
-
-    # Arizani ko'rib chiqilgan deb belgilash logikasi (agar modelda status bo'lsa)
-    # Agar modelda status bo'lmasa, shunchaki o'chirish tugmasi ishlaydi.
-
-    appointments = Appointment.objects.select_related('slot').all().order_by('slot__date', 'slot__time')
-    return render(request, 'appointments/admin_dashboard.html', {'appointments': appointments})

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toshloq tuman hokimligi | Admin Dashboard</title>
+    <title>Boshqaruv Paneli | Toshloq tuman hokimligi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -39,11 +39,9 @@
             border: 1px solid #334155;
             transition: 0.2s;
         }
-        .btn-home:hover {
-            background-color: #334155;
-        }
+        .btn-home:hover { background-color: #334155; }
 
-        .alert {
+        .alert-msg {
             background-color: #064e3b;
             color: #a7f3d0;
             padding: 15px;
@@ -66,10 +64,7 @@
             text-align: left;
         }
 
-        th, td {
-            padding: 16px 20px;
-            font-size: 14px;
-        }
+        th, td { padding: 16px 20px; font-size: 14px; }
 
         th {
             background-color: #111827;
@@ -80,17 +75,8 @@
             letter-spacing: 0.5px;
         }
 
-        tr {
-            border-bottom: 1px solid #334155;
-        }
-
-        tr:last-child {
-            border-bottom: none;
-        }
-
-        tr:hover {
-            background-color: #24324d;
-        }
+        tr { border-bottom: 1px solid #334155; }
+        tr:hover { background-color: #24324d; }
 
         .badge-time {
             background-color: #0369a1;
@@ -120,19 +106,12 @@
             cursor: pointer;
             border: none;
             transition: 0.2s;
-            text-decoration: none;
         }
 
-        .btn-success {
-            background-color: #16a34a;
-            color: white;
-        }
+        .btn-success { background-color: #16a34a; color: white; }
         .btn-success:hover { background-color: #15803d; }
 
-        .btn-danger {
-            background-color: #dc2626;
-            color: white;
-        }
+        .btn-danger { background-color: #dc2626; color: white; }
         .btn-danger:hover { background-color: #b91c1c; }
 
         .empty-state {
@@ -148,14 +127,14 @@
     <div class="header">
         <div>
             <h1>🏛️ Kelib tushgan murojaatlar jadvali</h1>
-            <p style="margin: 5px 0 0 0; color: #94a3b8; font-size: 14px;">Toshloq tuman hokimi qabuliga yozilgan fuqarolar ro'yxati</p>
+            <p style="margin: 5px 0 0 0; color: #94a3b8; font-size: 14px;">Qabulga yozilgan fuqarolarni boshqarish tizimi</p>
         </div>
         <a href="{% url 'home' %}" class="btn-home">Bosh sahifaga o'tish ←</a>
     </div>
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert">
+            <div class="alert-msg">
                 {{ message }}
             </div>
         {% endfor %}
@@ -168,9 +147,9 @@
                     <th>№</th>
                     <th>Fuqaro F.I.O</th>
                     <th>Telefon raqami</th>
-                    <th>Belgilangan sana va vaqt</th>
+                    <th>Belgilangan vaqt</th>
                     <th>Murojaat mazmuni</th>
-                    <th>Boshqarish / Amallar</th>
+                    <th>Amallar</th>
                 </tr>
             </thead>
             <tbody>
@@ -184,12 +163,12 @@
                                 {{ app.slot.date|date:"d-m-Y" }} | {{ app.slot.time|time:"H:i" }}
                             </span>
                         </td>
-                        <td style="color: #cbd5e1; max-width: 250px;">{{ app.complaint|default:"Yozilmagan" }}</td>
+                        <td style="color: #cbd5e1; max-width: 250px;">{{ app.complaint|default:"Izoh qoldirilmagan" }}</td>
                         <td>
                             <div class="action-btns">
-                                <button class="btn-action btn-success" onclick="alert('Murojaat ko\'rib chiqildi deb belgilandi!')">✔️ Ko'rildi</button>
+                                <button class="btn-action btn-success" onclick="alert('Fuqaro qabulga kelgan deb belgilandi!')">✔️ Ko'rildi</button>
 
-                                <form method="POST" onsubmit="return confirm('Haqiqatdan ham bu navbatni o\'chirmoqchimisiz?');" style="display:inline;">
+                                <form method="POST" onsubmit="return confirm('Ushbu fuqaro navbatini o\'chirmoqchimisiz?');" style="display:inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="delete_id" value="{{ app.id }}">
                                     <button type="submit" class="btn-action btn-danger">🗑️ O'chirish</button>
@@ -200,7 +179,7 @@
                 {% empty %}
                     <tr>
                         <td colspan="6" class="empty-state">
-                            📭 Hozircha kelib tushgan murojaatlar yoki band qilingan navbatlar mavjud emas.
+                            📭 Hozircha navbatga yozilgan fuqarolar yo'q.
                         </td>
                     </tr>
                 {% endfor %}
